@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-lang="meta_thankyou_title">Faleminderit | Micka Oil</title>
+  <meta name="description" data-meta-lang="meta_thankyou_description" content="Faleminderit qe kontaktuat Micka Oil. Mesazhi juaj u dergua me sukses." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="images/logo.png" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(228, 9, 9, 0.18), transparent 30%),
+        radial-gradient(circle at 88% 82%, rgba(228, 9, 9, 0.12), transparent 32%),
+        linear-gradient(135deg, #f7f8fb 0%, #ffffff 44%, #eef1f5 100%);
+      color: #111827;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .thankyou-shell {
+      width: min(1080px, 100%);
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1fr);
+      overflow: hidden;
+      border-radius: 34px;
+      background: #fff;
+      border: 1px solid rgba(216, 221, 228, 0.95);
+      box-shadow: 0 34px 76px rgba(17, 24, 39, 0.16);
+      animation: pageIn 0.7s ease both;
+    }
+
+    .thankyou-brand {
+      position: relative;
+      isolation: isolate;
+      padding: clamp(30px, 4vw, 48px);
+      display: grid;
+      align-content: space-between;
+      gap: 30px;
+      color: #fff;
+      background:
+        linear-gradient(rgba(10, 15, 25, 0.64), rgba(10, 15, 25, 0.84)),
+        url("images/pika kavaje.jpg") center / cover no-repeat;
+    }
+
+    .thankyou-brand::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 22% 16%, rgba(228, 9, 9, 0.56), transparent 34%),
+        linear-gradient(180deg, rgba(228, 9, 9, 0.26), rgba(8, 12, 20, 0.18));
+    }
+
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-lockup img {
+      width: 74px;
+      height: 74px;
+      border-radius: 18px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+    }
+
+    .brand-lockup strong {
+      display: block;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-lockup span,
+    .brand-note p {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .brand-note {
+      display: grid;
+      gap: 12px;
+    }
+
+    .brand-note h2 {
+      max-width: 11ch;
+      font-size: clamp(2.1rem, 4.2vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-note p {
+      max-width: 32ch;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .brand-status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand-status span {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .thankyou-content {
+      padding: clamp(34px, 5vw, 64px);
+      display: grid;
+      align-content: center;
+      gap: 28px;
+    }
+
+    .success-mark {
+      width: 86px;
+      height: 86px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.5), transparent 26%),
+        linear-gradient(135deg, #e40909, #b90808);
+      color: #fff;
+      font-size: 2.1rem;
+      box-shadow: 0 22px 44px rgba(228, 9, 9, 0.28);
+    }
+
+    .thankyou-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .thankyou-copy small {
+      color: #e40909;
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .thankyou-copy h1 {
+      max-width: 12ch;
+      color: #111827;
+      font-size: clamp(2.55rem, 6vw, 5rem);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+    }
+
+    .thankyou-copy p {
+      max-width: 46ch;
+      color: #4f5968;
+      font-size: 1.08rem;
+      line-height: 1.75;
+    }
+
+    .next-steps {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .step-card {
+      min-height: 116px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #f8fafc, #fff);
+      border: 1px solid rgba(220, 226, 235, 0.95);
+    }
+
+    .step-card i {
+      color: #e40909;
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+    }
+
+    .step-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .step-card span {
+      color: #667085;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .thankyou-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .thankyou-actions a {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 850;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .thankyou-actions a:first-child {
+      background: linear-gradient(135deg, #e40909, #bd1111);
+      color: #fff;
+      box-shadow: 0 18px 30px rgba(228, 9, 9, 0.24);
+    }
+
+    .thankyou-actions a:last-child {
+      background: #111827;
+      color: #fff;
+      box-shadow: 0 16px 26px rgba(17, 24, 39, 0.14);
+    }
+
+    .thankyou-actions a:hover {
+      transform: translateY(-3px);
+    }
+
+    .redirect-note {
+      color: #7a8493;
+      font-size: 0.94rem;
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 860px) {
+      body {
+        padding: 18px;
+      }
+
+      .thankyou-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .thankyou-brand {
+        min-height: 320px;
+      }
+
+      .brand-note h2 {
+        max-width: 14ch;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .thankyou-brand,
+      .thankyou-content {
+        padding: 26px;
+      }
+
+      .next-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .thankyou-actions a {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 20000);
+  </script>
+</head>
+
+<body>
+  <main class="thankyou-shell">
+    <section class="thankyou-brand" aria-label="Micka Oil">
+      <div class="brand-lockup">
+        <img src="images/logo.png" alt="Micka Oil Logo" />
+        <div>
+          <strong>Micka Oil</strong>
+          <span data-lang="thankyou_brand_tag">Furnizim i besueshem</span>
+        </div>
+      </div>
+
+      <div class="brand-note">
+        <h2 data-lang="thankyou_side_title">Kerkesa u regjistrua.</h2>
+        <p data-lang="thankyou_side_text">Mesazhi juaj eshte pranuar nga sistemi yne dhe do te shqyrtohet nga ekipi perkates.</p>
+      </div>
+
+      <div class="brand-status" aria-label="Statusi i kerkeses">
+        <span data-lang="thankyou_status_received">Mesazh i pranuar</span>
+        <span data-lang="thankyou_status_followup">Ndjekje nga ekipi</span>
+      </div>
+    </section>
+
+    <section class="thankyou-content">
+      <div class="success-mark" aria-hidden="true">
+        <i class="fa-solid fa-check"></i>
+      </div>
+
+      <div class="thankyou-copy">
+        <small data-lang="thankyou_kicker">Faleminderit</small>
+        <h1 data-lang="thankyou_title">Kerkesa juaj u dergua me sukses.</h1>
+        <p data-lang="thankyou_text">
+          Faleminderit qe kontaktuat Micka Oil. Ekipi yne do te shqyrtoje detajet e derguara dhe do t'ju kontaktoje sa me shpejt per hapat e metejshem.
+        </p>
+      </div>
+
+      <div class="next-steps">
+        <article class="step-card">
+          <i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i>
+          <strong data-lang="thankyou_step1_title">Shqyrtim i kerkeses</strong>
+          <span data-lang="thankyou_step1_text">Informacioni i derguar do te verifikohet nga ekipi perkates.</span>
+        </article>
+        <article class="step-card">
+          <i class="fa-solid fa-phone-volume" aria-hidden="true"></i>
+          <strong data-lang="thankyou_step2_title">Kontakt i radhes</strong>
+          <span data-lang="thankyou_step2_text">Do t'ju kontaktojme per pergjigje, sqarime ose bashkepunim.</span>
+        </article>
+      </div>
+
+      <div class="thankyou-actions">
+        <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i> <span data-lang="thankyou_home_cta">Faqja kryesore</span></a>
+        <a href="tel:+355698270125"><i class="fa-solid fa-phone" aria-hidden="true"></i> <span data-lang="thankyou_phone_cta">Kontakt direkt</span></a>
+      </div>
+
+      <p class="redirect-note" data-lang="thankyou_redirect">Do te ridrejtoheni automatikisht ne faqen kryesore pas 20 sekondash.</p>
+    </section>
+  </main>
+  <script src="language.js"></script>
+</body>
+</html>
