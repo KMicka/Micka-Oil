@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 94.5,
-  updatedAt: "2026-06-05T13:31:41+02:00",
+  updatedAt: "2026-06-07T10:41:30+02:00",
   products: [
     {
       id: "100",
@@ -63,7 +63,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 192
+      price: 190
     },
     {
       id: "diesel-shell",
@@ -101,6 +101,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     }
   ]
 };
+
 
 
 
