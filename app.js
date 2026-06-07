@@ -429,7 +429,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 192
+      price: 190
     },
     {
       id: "diesel-shell",
@@ -1641,6 +1641,7 @@ document.addEventListener("click", () => {
   document.getElementById('year').textContent = new Date().getFullYear();
 
 })();
+
 
 
 
