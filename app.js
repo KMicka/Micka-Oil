@@ -423,7 +423,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 192,
+      yesterdayPrice: 190,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete, furgonë dhe flota.",
