@@ -415,7 +415,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 173
+      price: 172
     },
     {
       id: "diesel",
