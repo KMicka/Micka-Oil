@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 94.5,
-  updatedAt: "2026-06-09T13:26:53+00:00",
+  updatedAt: "2026-06-09T13:26:57+00:00",
   products: [
     {
       id: "100",
