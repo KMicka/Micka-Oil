@@ -98,7 +98,7 @@ function updateLocalFiles(string $priceFile, string $appFile, array $values): vo
         'diesel-shell' => 'dieselShellPrice',
         'lpg' => 'lpgPrice',
     ] as $id => $field) {
-        $source = updateProductPrice($source, $id, (int)$values[$field]);
+        $source = updateProductPrice($source, (string)$id, (int)$values[$field]);
     }
 
     $source = updateExchangeRate($source, $values['exchangeRate']);
@@ -118,7 +118,7 @@ function updateLocalFiles(string $priceFile, string $appFile, array $values): vo
                 'diesel-shell' => 'dieselShellPrice',
                 'lpg' => 'lpgPrice',
             ] as $id => $field) {
-                $appSource = updateProductPrice($appSource, $id, (int)$values[$field]);
+                $appSource = updateProductPrice($appSource, (string)$id, (int)$values[$field]);
             }
             file_put_contents($appFile, $appSource, LOCK_EX);
         }
