@@ -1,0 +1,7 @@
+<Files "admin-config.php">
+  Require all denied
+</Files>
+
+<FilesMatch "^(ftp-config|github-config)\.json$">
+  Require all denied
+</FilesMatch>
