@@ -409,13 +409,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 172,
+      yesterdayPrice: 173,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 173
+      price: 171
     },
     {
       id: "diesel",
@@ -429,7 +429,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 190
+      price: 188
     },
     {
       id: "diesel-shell",
