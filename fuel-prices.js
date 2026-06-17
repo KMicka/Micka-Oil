@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 94.5,
-  updatedAt: "2026-06-13T11:24:52+00:00",
+  updatedAt: "2026-06-17T13:58:00+00:00",
   products: [
     {
       id: "100",
@@ -37,7 +37,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 171,
+      yesterdayPrice: 170,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -54,7 +54,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 188,
+      yesterdayPrice: 183,
       name: {
         sq: "Naftë",
         en: "Diesel"
