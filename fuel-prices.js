@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 94,
-  updatedAt: "2026-07-01T17:59:25+00:00",
+  updatedAt: "2026-07-06T12:08:08+00:00",
   products: [
     {
       id: "100",
@@ -46,7 +46,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 172
+      price: 178
     },
     {
       id: "diesel",
@@ -97,7 +97,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Alternativë ekonomike për përdorim të rregullt.",
         en: "Economic alternative for regular use."
       },
-      price: 65
+      price: 66
     }
   ]
 };
