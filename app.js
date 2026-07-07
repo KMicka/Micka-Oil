@@ -409,7 +409,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 172,
+      yesterdayPrice: 178,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
@@ -429,7 +429,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 176
+      price: 179
     },
     {
       id: "diesel-shell",
@@ -446,7 +446,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long-distance trips."
       },
-      price: 198
+      price: 209
     },
     {
       id: "lpg",
@@ -454,7 +454,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 65,
+      yesterdayPrice: 66,
       name: { sq: "Auto Gas", en: "Auto Gas" },
       description: {
         sq: "Alternativë ekonomike për përdorim të rregullt.",
