@@ -395,7 +395,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 209,
+      yesterdayPrice: 205,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Opsion premium për performancë më të lartë.",
@@ -437,7 +437,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 209,
+      yesterdayPrice: 198,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
