@@ -401,7 +401,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Opsion premium për performancë më të lartë.",
         en: "Premium option for stronger performance."
       },
-      price: 209
+      price: 205
     },
     {
       id: "95",
@@ -423,7 +423,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 176,
+      yesterdayPrice: 179,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete, furgonë dhe flota.",
@@ -437,7 +437,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 198,
+      yesterdayPrice: 209,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
@@ -446,7 +446,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long-distance trips."
       },
-      price: 209
+      price: 198
     },
     {
       id: "lpg",
