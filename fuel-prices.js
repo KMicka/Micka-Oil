@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 94,
-  updatedAt: "2026-07-07T10:15:37+00:00",
+  updatedAt: "2026-07-07T10:50:46+00:00",
   products: [
     {
       id: "100",
@@ -29,7 +29,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Opsion premium për performancë më të lartë.",
         en: "Premium option for stronger performance."
       },
-      price: 209
+      price: 205
     },
     {
       id: "95",
@@ -54,7 +54,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 176,
+      yesterdayPrice: 179,
       name: {
         sq: "Naftë",
         en: "Diesel"
@@ -71,7 +71,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 198,
+      yesterdayPrice: 209,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
@@ -80,7 +80,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long-distance trips."
       },
-      price: 209
+      price: 198
     },
     {
       id: "lpg",
