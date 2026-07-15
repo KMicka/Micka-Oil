@@ -415,7 +415,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 178
+      price: 189
     },
     {
       id: "diesel",
@@ -429,7 +429,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 179
+      price: 196
     },
     {
       id: "diesel-shell",
@@ -446,7 +446,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long-distance trips."
       },
-      price: 198
+      price: 208
     },
     {
       id: "lpg",
