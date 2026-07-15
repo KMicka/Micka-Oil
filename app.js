@@ -409,7 +409,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 178,
+      yesterdayPrice: 189,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
@@ -423,7 +423,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 179,
+      yesterdayPrice: 196,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete, furgonë dhe flota.",
@@ -437,7 +437,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 198,
+      yesterdayPrice: 208,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
