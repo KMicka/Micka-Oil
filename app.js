@@ -224,7 +224,6 @@ const locationsData = {
     service_local: "Lokal",
     service_auto: "Shërbim Auto",
     service_diesel_extra: "Diezel",
-    service_ev: "Karikim Elektrik",
     map_address: "Adresa",
     map_phone: "Tel",
     map_hours: "Orari",
@@ -242,7 +241,6 @@ const locationsData = {
     service_local: "Cafe",
     service_auto: "Auto Service",
     service_diesel_extra: "Diesel",
-    service_ev: "EV Charging",
     map_address: "Address",
     map_phone: "Phone",
     map_hours: "Hours",
@@ -272,8 +270,7 @@ const locations = [
     mapsUrl: "https://www.google.com/maps/place/Micka+Oil,+Kavaj%C3%AB/@41.2034413,19.5332306,17z/data=!3m1!4b1!4m6!3m5!1s0x134fdf80f1ba7d65:0x274563fd7005fb95!8m2!3d41.2034413!4d19.5358109!16s%2Fg%2F11nx1z2595",
     phone: "+355 69 827 0125",
     hoursKey: "hours_247",
-    services: ["service_premium", "service_diesel", "service_lpg", "service_local", "service_auto", "service_ev"],
-    featureImage: "images/ev-charging-active.jpg"
+    services: ["service_premium", "service_diesel", "service_lpg", "service_local", "service_auto"]
   },
   {
     id: 3,
@@ -1170,25 +1167,22 @@ function generateLocationCards(map, infoWindow) {
     const directionsUrl = loc.mapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${loc.pos.lat},${loc.pos.lng}`;
     
     card.innerHTML = `
-      ${loc.featureImage ? `
-        <figure class="location-card__feature-media">
-          <img src="${loc.featureImage}" alt="${currentLang === "en" ? "Electric vehicle charging at Micka Oil Kavaje" : "Karikim i automjetit elektrik ne Micka Oil Kavaje"}" loading="lazy" decoding="async">
-          <figcaption><i class="fa-solid fa-bolt" aria-hidden="true"></i>${currentLang === "en" ? "EV charging available" : "Karikim elektrik i disponueshem"}</figcaption>
-        </figure>
-      ` : ""}
-      <h3>${loc.city}</h3>
-      <p class="area">${loc.area}</p>
-      <p><strong>📞</strong> ${loc.phone}</p>
-      <p><strong>🕐</strong> ${translatedHours}</p>
+      <header class="location-card__header">
+        <span class="location-card__marker" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+        <div>
+          <h3>${loc.city}</h3>
+          <p class="area">${loc.area}</p>
+        </div>
+      </header>
+      <div class="location-card__details">
+        <p><i class="fa-solid fa-phone" aria-hidden="true"></i><span>${loc.phone}</span></p>
+        <p><i class="fa-regular fa-clock" aria-hidden="true"></i><span>${translatedHours}</span></p>
+      </div>
       
       <div class="location-card__services">
         <strong class="location-card__services-label">${t.map_services}:</strong>
         <div class="location-card__services-list">
-          ${translatedServices.map((s, index) => `
-            <span class="location-card__service-tag${loc.services[index] === "service_ev" ? " location-card__service-tag--ev" : ""}">
-              ${s}
-            </span>
-          `).join('')}
+          ${translatedServices.map((s) => `<span class="location-card__service-tag">${s}</span>`).join('')}
         </div>
       </div>
 
@@ -1208,7 +1202,11 @@ function generateLocationCards(map, infoWindow) {
     viewBtn.addEventListener("click", () => {
       // Smooth scroll to map
       const mapEl = document.getElementById("map");
-      mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      mapEl?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // The station information remains usable even when Google Maps is
+      // unavailable or has not finished loading yet.
+      if (!map) return;
 
       // Zoom and center
       setTimeout(() => {
@@ -1248,6 +1246,14 @@ function generateLocationCards(map, infoWindow) {
   }
 
   enhancePremiumGeneratedContent(grid);
+}
+
+// Render station information independently from the Google Maps API.
+// initMap will regenerate the same cards later and connect their map actions.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => generateLocationCards(null, null), { once: true });
+} else {
+  generateLocationCards(null, null);
 }
 
 // Make initMap global for location pages
