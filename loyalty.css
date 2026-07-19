@@ -77,36 +77,6 @@ body {
   z-index: 1200;
 }
 
-.navbar {
-  background:
-    linear-gradient(180deg, rgba(232, 0, 12, 0.98), rgba(190, 8, 13, 0.98)) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 14px 36px rgba(229, 9, 20, 0.26) !important;
-  backdrop-filter: blur(14px);
-}
-
-.navbar__link {
-  position: relative;
-  border-radius: 0 !important;
-  background: transparent !important;
-}
-
-.navbar__link.active,
-.navbar__link:hover {
-  color: #fff !important;
-}
-
-.navbar__link.active::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  height: 2px;
-  background: #fff;
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.85);
-}
-
 /* 02. HERO AND CARD STAGE */
 .loyalty-hero {
   min-height: 760px;

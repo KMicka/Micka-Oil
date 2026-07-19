@@ -9,6 +9,34 @@
     data-meta-lang="meta_home_description"
     content="Micka Oil ofron karburant cilësor, furnizim për biznese, shërbime për flota dhe pika karburanti në qytete kryesore të Shqipërisë."
   />
+  <link rel="canonical" href="https://micka.al/" />
+  <meta name="theme-color" content="#e40909" />
+  <meta property="og:locale" content="sq_AL" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Micka Oil" />
+  <meta property="og:title" content="Micka Oil | Karburant cilësor dhe shërbime energjie" />
+  <meta property="og:description" content="Karburant cilësor, furnizim për biznese, shërbime për flota dhe pika Micka Oil në Shqipëri." />
+  <meta property="og:url" content="https://micka.al/" />
+  <meta property="og:image" content="https://micka.al/images/Tirane.jpg" />
+  <meta property="og:image:alt" content="Stacion Micka Oil në Tiranë" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Micka Oil | Karburant cilësor dhe shërbime energjie" />
+  <meta name="twitter:description" content="Karburant cilësor dhe shërbime energjie në të gjithë Shqipërinë." />
+  <meta name="twitter:image" content="https://micka.al/images/Tirane.jpg" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Micka Oil",
+      "url": "https://micka.al/",
+      "logo": "https://micka.al/images/logo.png",
+      "telephone": "+355 69 827 0125",
+      "sameAs": [
+        "https://www.facebook.com/oilmicka",
+        "https://www.instagram.com/mickaoil/"
+      ]
+    }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,7 +45,7 @@
     rel="stylesheet"
   />
   <link rel="icon" href="images/logo.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260718-27" />
 
   <!-- Font Awesome for footer icons -->
   <link
@@ -40,6 +68,14 @@
       </video>
     </div>
   </div>
+  <script>
+    window.setTimeout(function () {
+      var loader = document.getElementById("preloader");
+      if (!loader) return;
+      loader.classList.add("hidden");
+      window.setTimeout(function () { loader.remove(); }, 500);
+    }, 1800);
+  </script>
 
   <!-- 02. FLOATING SOCIAL LINKS -->
   <div class="floating-social" id="floatingSocial">
@@ -202,7 +238,7 @@
   </section>
 
   <!-- 05. FUEL PRICE BOARD -->
-  <section class="home-price-board fade-in" aria-labelledby="priceBoardTitle">
+  <section class="home-price-board fade-in" id="fuelPrices" aria-labelledby="priceBoardTitle">
     <div class="price-board-frame">
       <div class="price-board-hero">
         <div class="price-board-shell">
@@ -247,7 +283,7 @@
       <div class="price-grid" id="priceGrid" aria-live="polite"></div>
 
       <div class="price-board-utility">
-        <section class="price-calculator" aria-labelledby="priceCalculatorTitle">
+        <section class="price-calculator" id="priceCalculator" aria-labelledby="priceCalculatorTitle">
           <div class="price-calculator__intro">
             <span class="price-calculator__icon" aria-hidden="true">
               <i class="fa-solid fa-calculator"></i>
@@ -265,7 +301,7 @@
                 <button id="priceQtyMinus" class="price-qty__btn" type="button" aria-label="Decrease liters">-</button>
                 <input id="priceQtyInput" type="number" min="1" step="1" inputmode="numeric" value="35" />
                 <button id="priceQtyPlus" class="price-qty__btn" type="button" aria-label="Increase liters">+</button>
-                <span class="price-qty__unit" data-lang="home_prices_unit">L</span>
+                <span class="price-qty__unit" data-lang="home_prices_unit">Litra</span>
               </div>
             </label>
 
@@ -298,6 +334,20 @@
           <span class="price-fleet-cta__action" data-lang="home_prices_fleet_cta">Na kontakto</span>
         </a>
       </div>
+
+      <section class="price-history" id="priceHistory" aria-labelledby="priceHistoryTitle">
+        <div class="price-history__head">
+          <div>
+            <span class="price-history__kicker" data-lang="home_price_history_kicker">Historiku i çmimeve</span>
+            <h3 id="priceHistoryTitle" data-lang="home_price_history_title">Lëvizja e çmimeve</h3>
+          </div>
+          <div class="price-history__tabs" role="group" aria-label="Price history range">
+            <button type="button" class="price-history__tab is-active" data-history-range="7">7D</button>
+            <button type="button" class="price-history__tab" data-history-range="30">30D</button>
+          </div>
+        </div>
+        <div id="priceHistoryChart" class="price-history__chart" aria-live="polite"></div>
+      </section>
 
       <div class="price-board-footnote">
         <i class="fa-regular fa-circle-check" aria-hidden="true"></i>
@@ -538,6 +588,27 @@
               <div class="product-card__nozzle-frame"><img class="product-card__nozzle" src="assets/images/products/nozle auto gas LPG cutout.png" alt="Nozle Auto Gas LPG" loading="lazy" decoding="async" /></div>
               <div class="product-tags"><span data-lang="product5_tag1">Ekonomik</span><span data-lang="product5_tag2">Praktik</span><span data-lang="product5_tag3">I qëndrueshëm</span></div>
             </article>
+
+            <article class="product-card product-card--ev-source">
+              <div class="product-card--ev-source__copy">
+                <span class="product-card--ev-source__eyebrow"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span data-lang="product_ev_kicker">Burim i ri për automjetet</span></span>
+                <div class="product-title">
+                  <h3 data-lang="product_ev_name">Karikim Elektrik</h3>
+                  <span class="badge">EV</span>
+                </div>
+                <p class="product-desc" data-lang="product_ev_desc">Karikim praktik për automjete elektrike, aktualisht i disponueshëm në pikën Micka Oil Kavajë.</p>
+                <div class="product-tags">
+                  <span data-lang="product_ev_tag1">Kavajë</span>
+                  <span data-lang="product_ev_tag2">Elektrik</span>
+                  <span data-lang="product_ev_tag3">Energji diellore</span>
+                </div>
+                <a href="location.html#locationsCards" data-lang="product_ev_cta">Shiko pikën Kavajë</a>
+              </div>
+              <figure class="product-card--ev-source__media">
+                <img src="images/ev-charging-active.jpg" alt="Automjet elektrik duke u karikuar në Micka Oil Kavajë" loading="lazy" decoding="async">
+                <figcaption><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Kavajë</figcaption>
+              </figure>
+            </article>
           </div>
 
           <div class="products-trust-strip" aria-label="Standardet e furnizimit">
@@ -705,9 +776,8 @@
   </footer>
 
   <!-- 13. SCRIPTS -->
-  <script src="language.js"></script>
-  <script src="fuel-prices.js"></script>
-  <script src="app.js"></script>
-  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDY4tNjAGmohA0ynY0Q2qH9yqwobtYlzg&callback=initMap"></script>
+  <script src="language.js?v=20260718-14"></script>
+  <script src="fuel-prices.js?v=20260717-12"></script>
+  <script src="app.js?v=20260718-19"></script>
 </body>
 </html>

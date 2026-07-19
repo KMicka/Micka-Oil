@@ -41,14 +41,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 450);
   };
 
-  const safetyTimer = setTimeout(hidePreloader, 5000);
+  const safetyTimer = setTimeout(hidePreloader, 2200);
 
   if (!video) {
     hidePreloader();
     return;
   }
 
-  video.preload = "auto";
+  video.preload = "metadata";
   video.play().catch((err) => {
     console.warn("Preloader video failed to play:", err);
   });
@@ -115,6 +115,18 @@ if (menu && menuLinks) {
   });
 }
 
+document.querySelectorAll(".navbar__link").forEach((link) => {
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  const linkPage = new URL(link.href, window.location.href).pathname.split("/").pop();
+  const isCurrentPage = currentPage === linkPage;
+  link.classList.toggle("active", isCurrentPage);
+  if (isCurrentPage) {
+    link.setAttribute("aria-current", "page");
+  } else {
+    link.removeAttribute("aria-current");
+  }
+});
+
 // =========================================================
 // 03. LANGUAGE SWITCH HOOKS
 // =========================================================
@@ -143,19 +155,31 @@ let autoplay;
 
 function changeSlide(index) {
   if (!items.length || !thumbs.length) return;
+  const nextIndex = (index + items.length) % items.length;
+  const direction = nextIndex > active || (active === items.length - 1 && nextIndex === 0) ? "next" : "prev";
 
   items.forEach((item, i) => {
-    item.classList.remove("active");
+    item.classList.remove("active", "is-entering-next", "is-entering-prev", "is-leaving-next", "is-leaving-prev");
+    if (i === active && i !== nextIndex) {
+      item.classList.add(direction === "next" ? "is-leaving-next" : "is-leaving-prev");
+    }
     if (thumbs[i]) thumbs[i].classList.remove("active");
   });
 
-  items[index].classList.add("active");
-  if (thumbs[index]) thumbs[index].classList.add("active");
-  active = index;
+  items[nextIndex].classList.add("active", direction === "next" ? "is-entering-next" : "is-entering-prev");
+  if (thumbs[nextIndex]) thumbs[nextIndex].classList.add("active");
+  active = nextIndex;
+
+  window.setTimeout(() => {
+    items.forEach((item) => {
+      item.classList.remove("is-entering-next", "is-entering-prev", "is-leaving-next", "is-leaving-prev");
+    });
+  }, 850);
 }
 
 function startAutoplay() {
   if (!next || !items.length) return;
+  stopAutoplay();
   autoplay = setInterval(() => next.click(), 7000);
 }
 
@@ -186,85 +210,7 @@ if (next && prev && items.length && thumbs.length) {
 }
 
 // =========================================================
-// 05. LEGACY GALLERY COVERFLOW HOOKS
-// Kept for older gallery markup; the current masonry gallery in gallery.html
-// owns its own lightbox and grid logic inline.
-// =========================================================
-const galleryCards = document.querySelectorAll("[data-gallery-card]");
-const galleryPrev = document.getElementById("galleryPrev");
-const galleryNext = document.getElementById("galleryNext");
-const galleryCurrent = document.getElementById("galleryCurrent");
-const galleryTitle = document.getElementById("galleryTitle");
-const galleryDescription = document.getElementById("galleryDescription");
-
-if (galleryCards.length) {
-  let galleryIndex = 0;
-  const galleryTotal = galleryCards.length;
-  const getWrappedIndex = (index) => (index + galleryTotal) % galleryTotal;
-
-  const renderGallery = (index) => {
-    galleryCards.forEach((card, cardIndex) => {
-      card.classList.remove("is-active", "is-prev", "is-next");
-
-      if (cardIndex === index) {
-        card.classList.add("is-active");
-      } else if (cardIndex === getWrappedIndex(index - 1)) {
-        card.classList.add("is-prev");
-      } else if (cardIndex === getWrappedIndex(index + 1)) {
-        card.classList.add("is-next");
-      }
-    });
-
-    const activeCard = galleryCards[index];
-    if (!activeCard) return;
-
-    if (galleryCurrent) {
-      galleryCurrent.textContent = String(index + 1).padStart(2, "0");
-    }
-
-    if (galleryTitle) {
-      galleryTitle.textContent = activeCard.dataset.title || "";
-    }
-
-    if (galleryDescription) {
-      galleryDescription.textContent = activeCard.dataset.description || "";
-    }
-  };
-
-  const goToGallery = (nextIndex) => {
-    galleryIndex = getWrappedIndex(nextIndex);
-    renderGallery(galleryIndex);
-  };
-
-  galleryCards.forEach((card, cardIndex) => {
-    card.addEventListener("click", () => {
-      goToGallery(cardIndex);
-    });
-  });
-
-  if (galleryPrev) {
-    galleryPrev.addEventListener("click", () => {
-      goToGallery(galleryIndex - 1);
-    });
-  }
-
-  if (galleryNext) {
-    galleryNext.addEventListener("click", () => {
-      goToGallery(galleryIndex + 1);
-    });
-  }
-
-  document.addEventListener("keydown", (event) => {
-    if (!document.body.classList.contains("gallery-page")) return;
-    if (event.key === "ArrowLeft") goToGallery(galleryIndex - 1);
-    if (event.key === "ArrowRight") goToGallery(galleryIndex + 1);
-  });
-
-  renderGallery(galleryIndex);
-}
-
-// =========================================================
-// 06A. LOCATION DATA WITH TRANSLATIONS
+// 05A. LOCATION DATA WITH TRANSLATIONS
 // =========================================================
 const locationsData = {
   sq: {
@@ -278,6 +224,7 @@ const locationsData = {
     service_local: "Lokal",
     service_auto: "Shërbim Auto",
     service_diesel_extra: "Diezel",
+    service_ev: "Karikim Elektrik",
     map_address: "Adresa",
     map_phone: "Tel",
     map_hours: "Orari",
@@ -295,6 +242,7 @@ const locationsData = {
     service_local: "Cafe",
     service_auto: "Auto Service",
     service_diesel_extra: "Diesel",
+    service_ev: "EV Charging",
     map_address: "Address",
     map_phone: "Phone",
     map_hours: "Hours",
@@ -324,7 +272,8 @@ const locations = [
     mapsUrl: "https://www.google.com/maps/place/Micka+Oil,+Kavaj%C3%AB/@41.2034413,19.5332306,17z/data=!3m1!4b1!4m6!3m5!1s0x134fdf80f1ba7d65:0x274563fd7005fb95!8m2!3d41.2034413!4d19.5358109!16s%2Fg%2F11nx1z2595",
     phone: "+355 69 827 0125",
     hoursKey: "hours_247",
-    services: ["service_premium", "service_diesel", "service_lpg", "service_local", "service_auto"]
+    services: ["service_premium", "service_diesel", "service_lpg", "service_local", "service_auto", "service_ev"],
+    featureImage: "images/ev-charging-active.jpg"
   },
   {
     id: 3,
@@ -372,6 +321,47 @@ const locations = [
   }
 ];
 
+const futureLocations = [
+  {
+    id: "future-1",
+    city: {
+      sq: "Vendndodhje e re",
+      en: "New location"
+    },
+    area: {
+      sq: "Në zhvillim",
+      en: "In development"
+    },
+    status: {
+      sq: "Së shpejti",
+      en: "Coming soon"
+    },
+    text: {
+      sq: "Kjo pikë do të shtohet sapo të konfirmohen koordinatat, shërbimet dhe oraret.",
+      en: "This station will be added once coordinates, services, and hours are confirmed."
+    }
+  },
+  {
+    id: "future-2",
+    city: {
+      sq: "Vendndodhje e re",
+      en: "New location"
+    },
+    area: {
+      sq: "Në planifikim",
+      en: "In planning"
+    },
+    status: {
+      sq: "Në punë",
+      en: "In progress"
+    },
+    text: {
+      sq: "Rezervuar për zgjerimin e ardhshëm të rrjetit Micka Oil.",
+      en: "Reserved for the next Micka Oil network expansion."
+    }
+  }
+];
+
 // =========================================================
 // 06B. SHARED LANGUAGE HELPER
 // =========================================================
@@ -386,8 +376,43 @@ const defaultHomeFuelPriceBoard = {
     sq: "Tiranë",
     en: "Tirana"
   },
-  exchangeRate: 98.5,
-  updatedAt: null,
+  exchangeRate: 93,
+  updatedAt: "2026-07-15T16:43:36+00:00",
+  history: [
+    {
+      date: "2026-06-01",
+      prices: {
+        "100": 209,
+        "95": 172,
+        diesel: 192,
+        "diesel-shell": 208,
+        lpg: 65,
+        ev: 38
+      }
+    },
+    {
+      date: "2026-06-07",
+      prices: {
+        "100": 209,
+        "95": 172,
+        diesel: 190,
+        "diesel-shell": 208,
+        lpg: 65,
+        ev: 38
+      }
+    },
+    {
+      date: "2026-07-15",
+      prices: {
+        "100": 205,
+        "95": 189,
+        diesel: 196,
+        "diesel-shell": 208,
+        lpg: 66,
+        ev: 38
+      }
+    }
+  ],
   products: [
     {
       id: "100",
@@ -395,11 +420,11 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 205,
+      yesterdayPrice: 209,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
-        sq: "Opsion premium për performancë më të lartë.",
-        en: "Premium option for stronger performance."
+        sq: "Performancë premium dhe fuqi.",
+        en: "Premium performance and power."
       },
       price: 205
     },
@@ -409,11 +434,11 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 189,
+      yesterdayPrice: 172,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
-        sq: "Zgjedhja praktike për përdorim të përditshëm.",
-        en: "Practical choice for everyday use."
+        sq: "Zgjedhje praktike për çdo ditë.",
+        en: "A practical choice for every day."
       },
       price: 189
     },
@@ -423,11 +448,11 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 196,
+      yesterdayPrice: 190,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
-        sq: "Ideale për automjete, furgonë dhe flota.",
-        en: "Ideal for vehicles, vans, and fleets."
+        sq: "Ideale për automjete dhe flota.",
+        en: "Ideal for vehicles and fleets."
       },
       price: 196
     },
@@ -444,7 +469,7 @@ const defaultHomeFuelPriceBoard = {
       },
       description: {
         sq: "Për flota dhe udhëtime të gjata.",
-        en: "For fleets and long-distance trips."
+        en: "For fleets and long journeys."
       },
       price: 208
     },
@@ -454,13 +479,27 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 66,
+      yesterdayPrice: 65,
       name: { sq: "Auto Gas", en: "Auto Gas" },
       description: {
-        sq: "Alternativë ekonomike për përdorim të rregullt.",
-        en: "Economic alternative for regular use."
+        sq: "Alternativë ekonomike dhe praktike.",
+        en: "An economical, practical alternative."
       },
       price: 66
+    },
+    {
+      id: "ev",
+      octane: "EV",
+      icon: "fa-charging-station",
+      accent: "red",
+      theme: "electric",
+      yesterdayPrice: 38,
+      name: { sq: "Karikim Elektrik", en: "EV Charging" },
+      description: {
+        sq: "Karikim i pastër me çmim për kW.",
+        en: "Clean charging with pricing per kW."
+      },
+      price: 38
     }
   ]
 };
@@ -469,6 +508,7 @@ const homeFuelPriceBoard = window.MICKA_HOME_FUEL_PRICE_BOARD || defaultHomeFuel
 
 let selectedHomeFuelId = "95";
 let selectedHomeFuelLiters = 35;
+let selectedPriceHistoryRange = 7;
 
 function getPriceBoardTimestamp(lang) {
   const timestamp = homeFuelPriceBoard.updatedAt ? new Date(homeFuelPriceBoard.updatedAt) : new Date();
@@ -488,6 +528,7 @@ function getHomeFuelProduct() {
 function getHomeFuelDisplayName(product, lang) {
   const label = product.name[lang] || product.name.sq;
   
+  if (product.id === "ev") return label;
   if (product.id === "lpg") return label;
   if (product.id === "diesel-shell") return label.replace(" ", "\n");
   return `${label} ${product.octane}`;
@@ -542,14 +583,33 @@ function getHomeFuelPricePairMarkup(lekValue, euroValue, lang, compact = false, 
 }
 
 function getHomeFuelPriceChange(product) {
-  const yesterdayPrice = Number(product.yesterdayPrice ?? product.price);
-  const delta = product.price - yesterdayPrice;
+  const currentPrice = Number(product.price);
+  const history = Array.isArray(homeFuelPriceBoard.history) ? homeFuelPriceBoard.history : [];
+  const recordedPrices = history
+    .filter((entry) => entry && entry.date && entry.prices)
+    .map((entry) => ({
+      timestamp: getHomeFuelHistoryTimestamp(entry.date),
+      value: Number(entry.prices[product.id])
+    }))
+    .filter((entry) => Number.isFinite(entry.timestamp) && Number.isFinite(entry.value))
+    .sort((a, b) => a.timestamp - b.timestamp);
+
+  let previousPrice = Number(product.yesterdayPrice ?? currentPrice);
+  for (let index = recordedPrices.length - 1; index >= 0; index -= 1) {
+    if (recordedPrices[index].value !== currentPrice) {
+      previousPrice = recordedPrices[index].value;
+      break;
+    }
+  }
+
+  const delta = currentPrice - previousPrice;
+  const unit = product.id === "ev" ? "kW" : "L";
 
   if (delta > 0) {
     return {
       direction: "up",
       icon: "fa-arrow-up",
-      value: `+${delta}`
+      value: `+${delta}/${unit}`
     };
   }
 
@@ -557,15 +617,30 @@ function getHomeFuelPriceChange(product) {
     return {
       direction: "down",
       icon: "fa-arrow-down",
-      value: `${delta}`
+      value: `${delta}/${unit}`
     };
   }
 
   return {
     direction: "flat",
     icon: "fa-minus",
-    value: "0"
+    value: `0/${unit}`
   };
+}
+
+function getHomeFuelHistoryTimestamp(value) {
+  if (typeof value !== "string" || !value.trim()) return Number.NaN;
+  const normalized = value.includes("T") ? value : `${value}T00:00:00`;
+  return new Date(normalized).getTime();
+}
+
+function formatHomeFuelHistoryDate(value, lang, includeTime = false) {
+  const timestamp = getHomeFuelHistoryTimestamp(value);
+  if (!Number.isFinite(timestamp)) return value;
+  const options = includeTime
+    ? { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }
+    : { day: "2-digit", month: "2-digit" };
+  return new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "sq-AL", options).format(new Date(timestamp));
 }
 
 function syncHomeFuelCalculator(lang) {
@@ -575,6 +650,8 @@ function syncHomeFuelCalculator(lang) {
   const totalEl = document.getElementById("priceEstimatedTotal");
   const perLiterEl = document.getElementById("pricePerLiterNote");
   const exchangeRateEl = document.getElementById("priceExchangeRateValue");
+  const quantityLabelEl = document.querySelector('label[for="priceQtyInput"] > span');
+  const quantityUnitEl = document.querySelector(".price-qty__unit");
   const total = selectedFuel.price * selectedHomeFuelLiters;
   const euroTotal = total / getHomeFuelExchangeRate();
 
@@ -594,10 +671,25 @@ function syncHomeFuelCalculator(lang) {
     exchangeRateEl.textContent = getHomeFuelExchangeRateLabel(lang);
   }
 
+  if (quantityLabelEl) {
+    quantityLabelEl.textContent = selectedFuel.id === "ev"
+      ? (lang === "en" ? "Amount (kW)" : "Sasia (kW)")
+      : (lang === "en" ? "Amount (Liters)" : "Sasia (Litra)");
+  }
+
+  if (quantityUnitEl) {
+    quantityUnitEl.textContent = selectedFuel.id === "ev"
+      ? "kW"
+      : (lang === "en" ? "Liters" : "Litra");
+  }
+
   if (perLiterEl) {
+    const unitLabel = selectedFuel.id === "ev"
+      ? (lang === "en" ? "kilowatt" : "kilovat")
+      : (lang === "en" ? "liter" : "litër");
     perLiterEl.textContent = lang === "en"
-      ? `Price per liter: ${selectedFuel.price} ALL`
-      : `Çmimi për litër: ${selectedFuel.price} Lek`;
+      ? `Price per ${unitLabel}: ${selectedFuel.price} ALL`
+      : `Çmimi për ${unitLabel}: ${selectedFuel.price} Lek`;
   }
 }
 
@@ -657,6 +749,159 @@ function bindHomeFuelPriceCards() {
   });
 }
 
+function getHomeFuelHistoryPoints(rangeDays) {
+  const byDate = new Map();
+  const history = Array.isArray(homeFuelPriceBoard.history) ? homeFuelPriceBoard.history : [];
+
+  history.forEach((entry) => {
+    if (!entry || !entry.date || !entry.prices) return;
+    byDate.set(entry.date, entry.prices);
+  });
+
+  const currentDate = getPriceBoardTimestamp("en").split("/").reverse().join("-");
+  const fallbackDate = homeFuelPriceBoard.updatedAt || currentDate;
+  const currentPrices = Object.fromEntries(homeFuelPriceBoard.products.map((product) => [product.id, product.price]));
+  const latestRecordedPrices = [...byDate.values()].at(-1);
+  const latestMatchesCurrent = latestRecordedPrices
+    && homeFuelPriceBoard.products.every((product) => Number(latestRecordedPrices[product.id]) === Number(product.price));
+  if (!latestMatchesCurrent) {
+    byDate.set(fallbackDate, currentPrices);
+  }
+
+  return [...byDate.entries()]
+    .map(([date, prices]) => ({ date, prices }))
+    .filter((entry) => Number.isFinite(getHomeFuelHistoryTimestamp(entry.date)))
+    .sort((a, b) => getHomeFuelHistoryTimestamp(a.date) - getHomeFuelHistoryTimestamp(b.date))
+    .slice(-rangeDays);
+}
+
+function getHistoryColor(product) {
+  const colors = {
+    "100": "#ef443a",
+    "95": "#69d36a",
+    diesel: "#407fe9",
+    "diesel-shell": "#f0c33f",
+    lpg: "#61d4e4",
+    ev: "#b875ff"
+  };
+  return colors[product.id] || "#ffffff";
+}
+
+function renderHomeFuelHistory() {
+  const chart = document.getElementById("priceHistoryChart");
+  if (!chart) return;
+
+  const lang = getCurrentLanguage();
+  const points = getHomeFuelHistoryPoints(selectedPriceHistoryRange);
+  const product = getHomeFuelProduct();
+
+  if (points.length < 2) {
+    chart.innerHTML = `<p class="price-history__empty">${lang === "en" ? "History will appear after the next price update." : "Historiku do të shfaqet pas përditësimit të radhës."}</p>`;
+    return;
+  }
+
+  const series = points
+    .map((point) => ({ date: point.date, value: Number(point.prices[product.id]) }))
+    .filter((point) => Number.isFinite(point.value));
+
+  if (series.length < 2) {
+    chart.innerHTML = `<p class="price-history__empty">${lang === "en" ? "More updates are needed for this product." : "Nevojiten më shumë përditësime për këtë produkt."}</p>`;
+    return;
+  }
+
+  const width = 1040;
+  const height = 300;
+  const pad = { top: 28, right: 30, bottom: 42, left: 62 };
+  const values = series.map((point) => point.value);
+  const observedMin = Math.min(...values);
+  const observedMax = Math.max(...values);
+  const observedRange = Math.max(observedMax - observedMin, 1);
+  const chartPadding = Math.max(2, Math.ceil(observedRange * 0.35));
+  const minValue = Math.max(0, observedMin - chartPadding);
+  const maxValue = observedMax + chartPadding;
+  const xFor = (index) => pad.left + (index / Math.max(series.length - 1, 1)) * (width - pad.left - pad.right);
+  const yFor = (value) => pad.top + ((maxValue - value) / Math.max(maxValue - minValue, 1)) * (height - pad.top - pad.bottom);
+  const yTicks = Array.from({ length: 4 }, (_, index) => Math.round(minValue + ((maxValue - minValue) * index) / 3));
+  const color = getHistoryColor(product);
+  const coords = series.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
+  const areaPoints = `${pad.left},${height - pad.bottom} ${coords} ${width - pad.right},${height - pad.bottom}`;
+  const dots = series.map((point, index) => `
+    <circle cx="${xFor(index).toFixed(1)}" cy="${yFor(point.value).toFixed(1)}" r="5.5" fill="${color}" stroke="#111820" stroke-width="3">
+      <title>${getHomeFuelDisplayName(product, lang)}: ${point.value} - ${formatHomeFuelHistoryDate(point.date, lang, point.date.includes("T"))}</title>
+    </circle>
+  `).join("");
+
+  const tickMarkup = yTicks.map((tick) => `
+    <g>
+      <line x1="${pad.left}" x2="${width - pad.right}" y1="${yFor(tick).toFixed(1)}" y2="${yFor(tick).toFixed(1)}" />
+      <text x="${pad.left - 12}" y="${(yFor(tick) + 4).toFixed(1)}">${tick}</text>
+    </g>
+  `).join("");
+
+  const labelStep = Math.max(1, Math.ceil(series.length / 6));
+  const xLabels = series.map((point, index) => {
+    if (index % labelStep !== 0 && index !== series.length - 1) return "";
+    const label = formatHomeFuelHistoryDate(point.date, lang, point.date.includes("T"));
+    return `<text x="${xFor(index).toFixed(1)}" y="${height - 12}" text-anchor="middle">${label}</text>`;
+  }).join("");
+
+  const firstValue = series[0].value;
+  const latestValue = series[series.length - 1].value;
+  const change = latestValue - firstValue;
+  const changeDirection = change > 0 ? "up" : change < 0 ? "down" : "flat";
+  const changeLabel = `${change > 0 ? "+" : ""}${change} Lek`;
+  const unitLabel = product.id === "ev" ? "LEK / KW" : "LEK / LITËR";
+  const selectedName = getHomeFuelDisplayName(product, lang).replace("\n", " ");
+  const labels = lang === "en"
+    ? { current: "Current", change: "Period change", range: "Low / high" }
+    : { current: "Aktualisht", change: "Ndryshimi", range: "Minimum / maksimum" };
+
+  chart.innerHTML = `
+    <div class="price-history__overview">
+      <div class="price-history__selected" style="--history-color:${color}">
+        <i aria-hidden="true"></i>
+        <div><span>${selectedName}</span><strong>${latestValue} <small>${unitLabel}</small></strong></div>
+      </div>
+      <div class="price-history__stats">
+        <div><span>${labels.current}</span><strong>${latestValue} Lek</strong></div>
+        <div class="price-history__stat--${changeDirection}"><span>${labels.change}</span><strong>${changeLabel}</strong></div>
+        <div><span>${labels.range}</span><strong>${observedMin} / ${observedMax}</strong></div>
+      </div>
+    </div>
+    <div class="price-history__canvas">
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${lang === "en" ? "Fuel price history chart" : "Grafiku i historikut të çmimeve"}">
+        <defs>
+          <linearGradient id="priceHistoryFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${color}" stop-opacity="0.34" />
+            <stop offset="100%" stop-color="${color}" stop-opacity="0.02" />
+          </linearGradient>
+        </defs>
+        <g class="price-history__grid">${tickMarkup}</g>
+        <polygon points="${areaPoints}" fill="url(#priceHistoryFill)" />
+        <g class="price-history__lines">
+          <polyline points="${coords}" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+          ${dots}
+        </g>
+        <g class="price-history__dates">${xLabels}</g>
+      </svg>
+    </div>
+  `;
+}
+
+function bindHomeFuelHistoryControls() {
+  document.querySelectorAll("[data-history-range]").forEach((button) => {
+    if (button.dataset.bound === "true") return;
+    button.dataset.bound = "true";
+    button.addEventListener("click", () => {
+      selectedPriceHistoryRange = Number(button.dataset.historyRange) || 7;
+      document.querySelectorAll("[data-history-range]").forEach((tab) => {
+        tab.classList.toggle("is-active", tab === button);
+      });
+      renderHomeFuelHistory();
+    });
+  });
+}
+
 function renderHomeFuelPrices() {
   const priceGrid = document.getElementById("priceGrid");
   if (!priceGrid) return;
@@ -676,24 +921,29 @@ function renderHomeFuelPrices() {
           "95": 'GASOLINE<span class="price-card__variant">95</span>',
           diesel: 'DIESEL<span class="price-card__variant">10 PPM</span>',
           "diesel-shell": '<span class="price-card__title-line">EXTRA DIESEL</span><span class="price-card__shell-word">SHELL</span>',
-          lpg: 'AUTO GAS<span class="price-card__variant">LPG</span>'
+          lpg: 'AUTO GAS<span class="price-card__variant">LPG</span>',
+          ev: 'EV<span class="price-card__variant">CHARGING</span>'
         }
       : {
           "100": 'BENZINË<span class="price-card__variant">100</span>',
           "95": 'BENZINË<span class="price-card__variant">95</span>',
           diesel: 'NAFTË<span class="price-card__variant">10 PPM</span>',
           "diesel-shell": '<span class="price-card__title-line">EXTRA DIEZEL</span><span class="price-card__shell-word">SHELL</span>',
-          lpg: 'AUTO GAS<span class="price-card__variant">LPG</span>'
+          lpg: 'AUTO GAS<span class="price-card__variant">LPG</span>',
+          ev: 'KARIKIM<span class="price-card__variant">ELEKTRIK</span>'
         };
     const titleMarkup = titleMap[product.id] || getHomeFuelDisplayName(product, lang).toLocaleUpperCase(lang === "en" ? "en-US" : "sq-AL");
     const iconClass = isShellDiesel ? "fa-crown" : product.icon;
-    const unitLabel = lang === "en" ? "ALL / LITER" : "LEK / LITËR";
+    const unitLabel = product.id === "ev"
+      ? (lang === "en" ? "ALL / KW" : "LEK / KW")
+      : (lang === "en" ? "ALL / LITER" : "LEK / LITËR");
     const noteIconMap = {
       "100": "fa-shield-halved",
       "95": "fa-leaf",
       diesel: "fa-truck",
       "diesel-shell": "fa-shield-halved",
-      lpg: "fa-leaf"
+      lpg: "fa-leaf",
+      ev: "fa-bolt"
     };
     const noteIcon = noteIconMap[product.id] || "fa-circle-info";
 
@@ -705,6 +955,12 @@ function renderHomeFuelPrices() {
         role="button"
         aria-pressed="${selectedHomeFuelId === product.id ? "true" : "false"}"
       >
+        ${selectedHomeFuelId === product.id ? `
+          <span class="price-card__selected-flag">
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
+            ${lang === "en" ? "SELECTED" : "ZGJEDHUR"}
+          </span>
+        ` : ""}
         <div class="price-card__corner-pill">${product.octane}</div>
         <div class="price-card__medallion" aria-hidden="true">
           <i class="fa-solid ${iconClass}"></i>
@@ -742,6 +998,8 @@ function renderHomeFuelPrices() {
   setupHomeFuelCalculatorControls();
   bindHomeFuelPriceCards();
   syncHomeFuelCalculator(lang);
+  bindHomeFuelHistoryControls();
+  renderHomeFuelHistory();
   enhancePremiumGeneratedContent(priceGrid);
 }
 
@@ -750,6 +1008,43 @@ window.renderHomeFuelPrices = renderHomeFuelPrices;
 // =========================================================
 // 06C. LOCATION PAGE MAP
 // =========================================================
+function stabilizeMapViewport(map, mapEl, options = {}) {
+  if (!map || !mapEl || !window.google?.maps) return;
+
+  const fitLocations = options.fitLocations !== false;
+  let resizeTimer;
+
+  const refreshMap = () => {
+    google.maps.event.trigger(map, "resize");
+
+    if (!fitLocations || !locations.length) return;
+
+    const bounds = new google.maps.LatLngBounds();
+    locations.forEach((location) => bounds.extend(location.pos));
+    map.fitBounds(bounds, window.innerWidth <= 700 ? 42 : 80);
+
+    google.maps.event.addListenerOnce(map, "idle", () => {
+      const maximumZoom = window.innerWidth <= 700 ? 8 : 9;
+      if (map.getZoom() > maximumZoom) map.setZoom(maximumZoom);
+    });
+  };
+
+  const queueRefresh = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(refreshMap, 120);
+  };
+
+  google.maps.event.addListenerOnce(map, "idle", queueRefresh);
+  requestAnimationFrame(() => requestAnimationFrame(queueRefresh));
+  window.addEventListener("resize", queueRefresh, { passive: true });
+  window.addEventListener("orientationchange", queueRefresh, { passive: true });
+
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(queueRefresh);
+    observer.observe(mapEl);
+  }
+}
+
 function initMap() {
   const mapEl = document.getElementById("map");
   if (!mapEl) {
@@ -837,6 +1132,8 @@ function initMap() {
       });
     });
 
+    stabilizeMapViewport(map, mapEl);
+
     // Generate cards if on location.html
     const cardsGrid = document.getElementById("cardsGrid");
     if (cardsGrid) {
@@ -873,6 +1170,12 @@ function generateLocationCards(map, infoWindow) {
     const directionsUrl = loc.mapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${loc.pos.lat},${loc.pos.lng}`;
     
     card.innerHTML = `
+      ${loc.featureImage ? `
+        <figure class="location-card__feature-media">
+          <img src="${loc.featureImage}" alt="${currentLang === "en" ? "Electric vehicle charging at Micka Oil Kavaje" : "Karikim i automjetit elektrik ne Micka Oil Kavaje"}" loading="lazy" decoding="async">
+          <figcaption><i class="fa-solid fa-bolt" aria-hidden="true"></i>${currentLang === "en" ? "EV charging available" : "Karikim elektrik i disponueshem"}</figcaption>
+        </figure>
+      ` : ""}
       <h3>${loc.city}</h3>
       <p class="area">${loc.area}</p>
       <p><strong>📞</strong> ${loc.phone}</p>
@@ -881,8 +1184,8 @@ function generateLocationCards(map, infoWindow) {
       <div class="location-card__services">
         <strong class="location-card__services-label">${t.map_services}:</strong>
         <div class="location-card__services-list">
-          ${translatedServices.map(s => `
-            <span class="location-card__service-tag">
+          ${translatedServices.map((s, index) => `
+            <span class="location-card__service-tag${loc.services[index] === "service_ev" ? " location-card__service-tag--ev" : ""}">
               ${s}
             </span>
           `).join('')}
@@ -918,6 +1221,25 @@ function generateLocationCards(map, infoWindow) {
         }
       }, 600);
     });
+  });
+
+  futureLocations.forEach((loc) => {
+    const card = document.createElement("article");
+    card.className = "location-card location-card--future";
+    card.innerHTML = `
+      <span class="location-card__status">${loc.status[currentLang] || loc.status.sq}</span>
+      <h3>${loc.city[currentLang] || loc.city.sq}</h3>
+      <p class="area">${loc.area[currentLang] || loc.area.sq}</p>
+      <p class="location-card__future-text">${loc.text[currentLang] || loc.text.sq}</p>
+      <div class="location-card__services">
+        <strong class="location-card__services-label">${currentLang === "en" ? "Planned slot" : "Hapësirë e planifikuar"}</strong>
+        <div class="location-card__services-list">
+          <span class="location-card__service-tag">${currentLang === "en" ? "Future network" : "Rrjet i ardhshëm"}</span>
+          <span class="location-card__service-tag">${currentLang === "en" ? "Details pending" : "Detajet në pritje"}</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
   });
   
   // Apply translations to the buttons we just created
@@ -1000,11 +1322,46 @@ if (window.location.pathname.includes("index.html") ||
           infoWindow.open(map, marker);
         });
       });
+
+      stabilizeMapViewport(map, mapEl);
     } catch (err) {
       console.error("Error initializing Google Maps:", err);
       mapEl.innerHTML = '<div class="map-error"><p>Map initialization failed. Please refresh the page.</p></div>';
     }
   };
+}
+
+// Load Google Maps only when the map is close to being viewed.
+function loadGoogleMapsWhenNeeded() {
+  const mapEl = document.getElementById("map");
+  if (!mapEl || window.google?.maps || document.getElementById("googleMapsApi")) return;
+
+  const load = () => {
+    if (window.google?.maps || document.getElementById("googleMapsApi")) return;
+    const script = document.createElement("script");
+    script.id = "googleMapsApi";
+    script.async = true;
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDDY4tNjAGmohA0ynY0Q2qH9yqwobtYlzg&callback=initMap&loading=async";
+    document.head.appendChild(script);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      load();
+    }, { rootMargin: "650px 0px" });
+    observer.observe(mapEl);
+    return;
+  }
+
+  window.setTimeout(load, 1400);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadGoogleMapsWhenNeeded, { once: true });
+} else {
+  loadGoogleMapsWhenNeeded();
 }
 
 // =========================================================
@@ -1206,9 +1563,15 @@ scrollBtn.setAttribute("aria-label", "Scroll to top");
 scrollBtn.textContent = "↑";
 document.body.appendChild(scrollBtn);
 
+let scrollTopTicking = false;
 window.addEventListener("scroll", () => {
-  scrollBtn.classList.toggle("show", window.scrollY > 600);
-});
+  if (scrollTopTicking) return;
+  scrollTopTicking = true;
+  window.requestAnimationFrame(() => {
+    scrollBtn.classList.toggle("show", window.scrollY > 600);
+    scrollTopTicking = false;
+  });
+}, { passive: true });
 
 scrollBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1231,24 +1594,6 @@ if (floatingSocial && footer) {
   );
   footerObserver.observe(footer);
 }
-
-// =========================================================
-// 08D. HISTORY SCROLL ANIMATION
-// =========================================================
-const historyItems = document.querySelectorAll(".history-item");
-
-const historyObserver = new IntersectionObserver(
-  entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-      }
-    });
-  },
-  { threshold: 0.2 }
-);
-
-historyItems.forEach(item => historyObserver.observe(item));
 
 // =========================================================
 // 09C. LOYALTY CARDS - PERSISTENT DETAILS
@@ -1390,7 +1735,7 @@ document.addEventListener("click", () => {
     if (isVideo(item)) {
       return `<video src="${item.src}" muted playsinline preload="metadata" data-thumb-time="${item.thumbTime || 1}"></video><span class="g-video-caption">${item.cap}</span><span class="g-media-play"><i class="fa-solid fa-play"></i></span>`;
     }
-    return `<img src="${item.src}" alt="${item.cap}" loading="${eager ? 'eager' : 'lazy'}">`;
+    return `<img src="${item.src}" alt="${item.cap}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
   }
 
   function tagLabel(item) {
@@ -1408,12 +1753,35 @@ document.addEventListener("click", () => {
 
   function renderGrid() {
     grid.innerHTML = IMGS.map((item, idx) => `
-      <div class="g-card ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}">
-        ${mediaMarkup(item)}
+      <div class="g-card g-card--loading ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}">
+        ${mediaMarkup(item, idx < 4)}
+        <span class="g-card__loader" role="status"><i aria-hidden="true"></i><span>Duke ngarkuar</span></span>
         <div class="g-card__overlay"><div class="g-card__icon"><i class="fa-solid fa-expand"></i></div></div>
         <span class="g-card__tag">${tagLabel(item)}</span>
       </div>`).join('');
+    prepareMediaLoadingStates();
     prepareVideoThumbnails();
+  }
+
+  function prepareMediaLoadingStates() {
+    const settleCard = (media, failed = false) => {
+      const card = media.closest('.g-card');
+      if (!card) return;
+      card.classList.remove('g-card--loading');
+      card.classList.toggle('g-card--error', failed);
+    };
+
+    grid.querySelectorAll('.g-card img').forEach(img => {
+      img.addEventListener('load', () => settleCard(img), { once: true });
+      img.addEventListener('error', () => settleCard(img, true), { once: true });
+      if (img.complete) settleCard(img, img.naturalWidth === 0);
+    });
+
+    grid.querySelectorAll('.g-card video').forEach(video => {
+      video.addEventListener('seeked', () => settleCard(video), { once: true });
+      video.addEventListener('canplay', () => settleCard(video), { once: true });
+      video.addEventListener('error', () => settleCard(video, true), { once: true });
+    });
   }
 
   function prepareVideoThumbnails() {
@@ -1429,6 +1797,7 @@ document.addEventListener("click", () => {
       };
       video.addEventListener('loadedmetadata', seekToFrame, { once: true });
       video.addEventListener('seeked', () => video.classList.add('is-thumb-ready'), { once: true });
+      video.addEventListener('canplay', () => video.classList.add('is-thumb-ready'), { once: true });
       video.load();
     });
   }
@@ -1641,6 +2010,7 @@ document.addEventListener("click", () => {
   document.getElementById('year').textContent = new Date().getFullYear();
 
 })();
+
 
 
 
