@@ -17537,7 +17537,7 @@ body.home-page .price-history__lines circle {
    ========================================================= */
 html {
   overflow-x: hidden;
-  font-size: 105%;
+  font-size: 100%;
 }
 
 body {
@@ -18096,11 +18096,11 @@ body {
 .navbar {
   overflow: visible;
   border: 0;
-  border-top: 3px solid #17191c;
-  border-bottom: 2px solid rgba(255, 255, 255, .9);
+  border-top: 1px solid #8e1712;
+  border-bottom: 1px solid rgba(255, 255, 255, .72);
   background: #df332b;
-  background-image: linear-gradient(180deg, #e43a32 0%, #dc3028 100%);
-  box-shadow: 0 3px 10px rgba(34, 0, 0, .16);
+  background-image: none;
+  box-shadow: 0 2px 8px rgba(34, 0, 0, .13);
 }
 
 .navbar::before {
@@ -18120,26 +18120,26 @@ body {
 }
 
 .navbar__container {
-  width: min(1810px, calc(100% - 64px));
-  max-width: 1810px;
-  height: 94px;
+  width: min(1400px, calc(100% - 48px));
+  max-width: 1400px;
+  height: 84px;
   padding: 0;
-  gap: clamp(44px, 5vw, 110px);
+  gap: clamp(28px, 3vw, 54px);
 }
 
 #navbar__logo {
-  width: 92px;
-  min-width: 92px;
-  height: 88px;
+  width: 76px;
+  min-width: 76px;
+  height: 78px;
   padding: 0;
 }
 
 #navbar__logo img,
 #navbar__logo:hover img,
 #navbar__logo:focus-visible img {
-  width: 76px;
-  height: 76px;
-  max-height: 76px;
+  width: 64px;
+  height: 64px;
+  max-height: 64px;
   transform: none;
   animation: none;
   filter: drop-shadow(0 3px 5px rgba(119, 5, 0, .18));
@@ -18148,7 +18148,7 @@ body {
 .navbar__menu {
   flex: 1;
   justify-content: space-between;
-  gap: clamp(24px, 3.2vw, 72px);
+  gap: clamp(12px, 1.8vw, 32px);
 }
 
 .navbar__menu > li,
@@ -18162,18 +18162,18 @@ body {
 .navbar__link,
 .navbar__menu > li:nth-child(4) .navbar__link {
   width: auto;
-  height: 46px;
-  min-height: 46px;
-  padding: 0 8px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 6px;
   border: 0;
   border-radius: 0;
   color: #fff;
   background: transparent;
   box-shadow: none;
-  font-size: clamp(.92rem, 1vw, 1.08rem);
-  font-weight: 520;
-  letter-spacing: -.018em;
-  text-shadow: 0 1px 2px rgba(93, 0, 0, .18);
+  font-size: clamp(.82rem, .88vw, .94rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-shadow: none;
   transform: none;
 }
 
@@ -18190,7 +18190,7 @@ body {
 
 .navbar__link::after {
   right: 8px;
-  bottom: 5px;
+  bottom: 4px;
   left: 8px;
   height: 2px;
   border-radius: 2px;
@@ -18210,17 +18210,17 @@ body {
 
 .lang-toggle {
   flex: 0 0 auto;
-  grid-template-columns: 24px 74px 24px;
-  gap: 8px;
-  width: 138px;
+  grid-template-columns: 20px 66px 20px;
+  gap: 5px;
+  width: 116px;
   margin: 0;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
 }
 
 .lang-track {
-  width: 74px;
-  height: 36px;
+  width: 66px;
+  height: 32px;
   border-color: rgba(255, 255, 255, .34);
   background: #090909;
   box-shadow: none;
@@ -18228,8 +18228,8 @@ body {
 
 .lang-knob,
 .lang-knob img {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
 }
 
 .lang-knob {
@@ -18238,7 +18238,7 @@ body {
 }
 
 .lang-switch input:checked + .lang-track .lang-knob {
-  transform: translateX(37px);
+  transform: translateX(33px);
 }
 
 @media (max-width: 1180px) and (min-width: 901px) {
@@ -18280,36 +18280,36 @@ body {
 
 @media (max-width: 900px) {
   .navbar {
-    border-top-width: 2px;
+    border-top-width: 1px;
     border-bottom-width: 1px;
     background: #df332b;
-    background-image: linear-gradient(180deg, #e43a32, #d82d26);
+    background-image: none;
   }
 
   .navbar__container {
     width: calc(100% - 24px);
-    height: 72px;
+    height: 66px;
     gap: 12px;
   }
 
   #navbar__logo {
-    width: 62px;
-    min-width: 62px;
-    height: 66px;
+    width: 54px;
+    min-width: 54px;
+    height: 60px;
   }
 
   #navbar__logo img,
   #navbar__logo:hover img,
   #navbar__logo:focus-visible img {
-    width: 56px;
-    height: 56px;
-    max-height: 56px;
+    width: 48px;
+    height: 48px;
+    max-height: 48px;
   }
 
   .navbar__toggle {
-    width: 42px;
-    height: 42px;
-    padding: 10px;
+    width: 38px;
+    height: 38px;
+    padding: 9px;
     border: 1px solid rgba(255, 255, 255, .36);
     border-radius: 8px;
     background: rgba(116, 4, 0, .16);
@@ -18332,20 +18332,20 @@ body {
 
   .navbar__menu.active {
     min-height: 0;
-    max-height: 410px;
-    padding: 8px 12px 11px;
+    max-height: 380px;
+    padding: 7px 12px 10px;
   }
 
   .navbar__link,
   .navbar__menu > li:nth-child(4) .navbar__link,
   .navbar__link.active {
-    height: 45px;
-    min-height: 45px;
+    height: 42px;
+    min-height: 42px;
     padding: 0 14px;
     border: 0;
     border-radius: 6px;
     background: transparent;
-    font-size: .88rem;
+    font-size: .84rem;
     font-weight: 650;
     letter-spacing: .01em;
   }
