@@ -18388,3 +18388,127 @@ body {
     transform: translateX(33px);
   }
 }
+
+/* =========================================================
+   NAVBAR SIGNATURE DETAIL
+   Quiet motion and light accents without adding visual weight.
+   ========================================================= */
+.navbar {
+  isolation: isolate;
+}
+
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  opacity: .72;
+  background:
+    radial-gradient(circle at 12% 28%, rgba(255,255,255,.42) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 73% 68%, rgba(255,255,255,.28) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 91% 22%, rgba(255,220,216,.3) 0 1px, transparent 1.8px),
+    linear-gradient(108deg, transparent 0 37%, rgba(255,255,255,.13) 46%, transparent 55% 100%);
+  background-size: 180px 84px, 230px 84px, 270px 84px, 220% 100%;
+  background-position: 0 0, 0 0, 0 0, 120% 0;
+  animation: navbar-light-pass 12s ease-in-out infinite;
+}
+
+@keyframes navbar-light-pass {
+  0%, 18% { background-position: 0 0, 0 0, 0 0, 130% 0; }
+  58%, 100% { background-position: 0 0, 0 0, 0 0, -130% 0; }
+}
+
+#navbar__logo {
+  isolation: isolate;
+}
+
+#navbar__logo::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  right: 8px;
+  z-index: 2;
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 7px 2px rgba(255,255,255,.72);
+  pointer-events: none;
+  animation: logo-glint 5.8s ease-in-out infinite;
+}
+
+@keyframes logo-glint {
+  0%, 66%, 100% { opacity: 0; transform: scale(.4); }
+  72% { opacity: .95; transform: scale(1); }
+  79% { opacity: 0; transform: scale(1.8); }
+}
+
+.navbar__link::after {
+  background: linear-gradient(90deg, transparent, #fff 18% 82%, transparent);
+}
+
+.navbar__link.active::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 0 6px rgba(255,255,255,.7);
+}
+
+.lang-track {
+  position: relative;
+  overflow: hidden;
+}
+
+.lang-track::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 25%, rgba(255,255,255,.18) 45%, transparent 65%);
+  transform: translateX(-110%);
+  transition: transform .45s ease;
+}
+
+.lang-switch:hover .lang-track::after,
+.lang-switch:focus-within .lang-track::after {
+  transform: translateX(110%);
+}
+
+@media (max-width: 900px) {
+  .navbar::before {
+    opacity: .42;
+    background-size: 150px 66px, 190px 66px, 220px 66px, 240% 100%;
+  }
+
+  #navbar__logo::after {
+    top: 8px;
+    right: 4px;
+  }
+
+  .navbar__link.active::before {
+    top: 50%;
+    right: 13px;
+    transform: translateY(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar::before,
+  #navbar__logo::after {
+    animation: none;
+  }
+
+  #navbar__logo::after {
+    display: none;
+  }
+}
