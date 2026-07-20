@@ -19090,3 +19090,53 @@ body {
     opacity: .36;
   }
 }
+
+/* Mobile navbar tone lock: header, drawer and controls use one red system. */
+@media (max-width: 900px) {
+  .navbar,
+  .navbar__menu,
+  .navbar__menu.active {
+    background-color: #dd3028;
+    background-image:
+      radial-gradient(circle at 8% 26%, rgba(255,255,255,.14) 0 1px, transparent 1.6px),
+      radial-gradient(circle at 91% 70%, rgba(255,255,255,.1) 0 1px, transparent 1.6px);
+    background-size: 140px 72px, 190px 72px;
+    box-shadow: none;
+  }
+
+  .navbar__menu,
+  .navbar__menu.active {
+    z-index: 1001;
+    border-top: 1px solid rgba(255,255,255,.16);
+    border-bottom: 1px solid rgba(116,0,0,.16);
+  }
+
+  .navbar__link,
+  .navbar__menu > li:nth-child(4) .navbar__link,
+  .navbar__link:hover,
+  .navbar__link:focus-visible,
+  .navbar__link.active {
+    border: 1px solid transparent;
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .navbar__link:hover,
+  .navbar__link:focus-visible,
+  .navbar__link.active {
+    border-color: rgba(255,255,255,.2);
+    background: rgba(255,255,255,.075);
+  }
+
+  .navbar__toggle,
+  .navbar__toggle:hover,
+  .navbar__toggle:focus-visible,
+  .navbar__toggle.is-active {
+    border: 1px solid rgba(255,255,255,.24);
+    background: rgba(255,255,255,.06);
+    box-shadow: none;
+    filter: none;
+    outline: none;
+  }
+}
