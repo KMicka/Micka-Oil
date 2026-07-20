@@ -18912,3 +18912,59 @@ body {
     padding-top: 6px;
   }
 }
+
+/* Saved navbar layout corrections: prevent clipping and align with page shell. */
+@media (min-width: 901px) {
+  .navbar__container {
+    width: min(1540px, calc(100% - 48px));
+    max-width: 1540px;
+  }
+
+  .navbar__menu {
+    justify-content: space-between;
+    gap: clamp(8px, 1.25vw, 24px);
+  }
+
+  .navbar__link,
+  .navbar__menu > li:nth-child(4) .navbar__link {
+    width: auto;
+    min-width: 128px;
+    padding: 0 12px;
+    overflow: visible;
+  }
+
+  .navbar__menu > li:nth-child(4) .navbar__link {
+    min-width: 194px;
+  }
+
+  .lang-toggle {
+    margin-left: clamp(8px, 1.5vw, 24px);
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .navbar__container {
+    width: calc(100% - 28px);
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .navbar__menu {
+    gap: 3px;
+  }
+
+  .navbar__link,
+  .navbar__menu > li:nth-child(4) .navbar__link {
+    min-width: 0;
+    padding: 0 7px;
+    font-size: .82rem;
+  }
+
+  .navbar__menu > li:nth-child(4) .navbar__link {
+    min-width: 158px;
+  }
+
+  .lang-toggle {
+    margin-left: 4px;
+  }
+}
