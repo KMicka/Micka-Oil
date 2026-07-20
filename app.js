@@ -115,9 +115,14 @@ if (menu && menuLinks) {
   });
 }
 
+const normalizeNavbarPage = (pathname) => {
+  const page = pathname.replace(/\/$/, "").split("/").pop() || "index";
+  return decodeURIComponent(page).replace(/\.html$/i, "").toLowerCase();
+};
+
 document.querySelectorAll(".navbar__link").forEach((link) => {
-  const currentPage = window.location.pathname.split("/").pop() || "index.html";
-  const linkPage = new URL(link.href, window.location.href).pathname.split("/").pop();
+  const currentPage = normalizeNavbarPage(window.location.pathname);
+  const linkPage = normalizeNavbarPage(new URL(link.href, window.location.href).pathname);
   const isCurrentPage = currentPage === linkPage;
   link.classList.toggle("active", isCurrentPage);
   if (isCurrentPage) {
@@ -349,8 +354,8 @@ const futureLocations = [
       en: "In planning"
     },
     status: {
-      sq: "Në punë",
-      en: "In progress"
+      sq: "Së shpejti",
+      en: "Coming soon"
     },
     text: {
       sq: "Rezervuar për zgjerimin e ardhshëm të rrjetit Micka Oil.",

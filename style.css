@@ -27,6 +27,34 @@
   padding: 0; 
 }
 
+/* Keep the loyalty destination visibly selected on its own page. */
+body.loyalty-page-body .navbar__menu > li:nth-child(4) .navbar__link,
+body.loyalty-page-body .navbar__link[aria-current="page"] {
+  border-color: rgba(255,255,255,.2) !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,.142) !important;
+}
+
+/* Center the homepage network showcase independently of surrounding sections. */
+body.home-page .slider-showcase {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 24px;
+  box-sizing: border-box;
+}
+
+body.home-page .slider-showcase .showcase-header,
+body.home-page .slider-showcase .slider {
+  width: min(100%, 1400px);
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+  body.home-page .slider-showcase { padding-inline: 0; }
+}
+
 :root {
   --nav-h: 72px;
   --radius: 16px;
