@@ -9,8 +9,7 @@
    ========================================================= */
 
 /* 01. PAGE BASE */
-html,
-body {
+.loyalty-page-body {
   margin: 0;
   min-height: 100%;
   background:
@@ -22,7 +21,7 @@ body {
   color: #fff;
 }
 
-body {
+.loyalty-page-body {
   padding-top: 0 !important;
 }
 

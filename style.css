@@ -15,6 +15,8 @@
    Keep page-specific rules grouped under their page heading.
    ========================================================= */
 
+@import url("loyalty.css?v=20260720-30");
+
 /* =========================================================
    01. GLOBAL RESET, VARIABLES, BASE LAYOUT
    ========================================================= */
