@@ -378,8 +378,8 @@ const defaultHomeFuelPriceBoard = {
     sq: "Tiranë",
     en: "Tirana"
   },
-  exchangeRate: 93,
-  updatedAt: "2026-07-15T16:43:36+00:00",
+  exchangeRate: 92,
+  updatedAt: "2026-07-22T10:26:11+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -413,6 +413,17 @@ const defaultHomeFuelPriceBoard = {
         lpg: 66,
         ev: 38
       }
+    },
+    {
+      date: "2026-07-22",
+      prices: {
+        "100": 206,
+        "95": 189,
+        diesel: 206,
+        "diesel-shell": 212,
+        lpg: 66,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -422,13 +433,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 209,
+      yesterdayPrice: 205,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Performancë premium dhe fuqi.",
         en: "Premium performance and power."
       },
-      price: 205
+      price: 206
     },
     {
       id: "95",
@@ -436,7 +447,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 172,
+      yesterdayPrice: 189,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhje praktike për çdo ditë.",
@@ -450,13 +461,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 190,
+      yesterdayPrice: 196,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete dhe flota.",
         en: "Ideal for vehicles and fleets."
       },
-      price: 196
+      price: 206
     },
     {
       id: "diesel-shell",
@@ -473,7 +484,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long journeys."
       },
-      price: 208
+      price: 212
     },
     {
       id: "lpg",
@@ -481,7 +492,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 65,
+      yesterdayPrice: 66,
       name: { sq: "Auto Gas", en: "Auto Gas" },
       description: {
         sq: "Alternativë ekonomike dhe praktike.",
