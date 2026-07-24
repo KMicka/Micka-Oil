@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-07-24T12:31:08+00:00",
+  updatedAt: "2026-07-24T12:31:11+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -58,7 +58,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         ev: 38
       }
     },
-    {
+        {
       date: "2026-07-24",
       prices: {
         "100": 206,
@@ -128,7 +128,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 212,
+      yesterdayPrice: 218,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
