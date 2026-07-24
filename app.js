@@ -379,7 +379,7 @@ const defaultHomeFuelPriceBoard = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-07-24T12:31:27+00:00",
+  updatedAt: "2026-07-24T12:31:31+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -425,7 +425,7 @@ const defaultHomeFuelPriceBoard = {
         ev: 38
       }
     },
-                            {
+                                {
       date: "2026-07-24",
       prices: {
         "100": 206,
