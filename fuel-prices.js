@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-08-01T13:40:44+00:00",
+  updatedAt: "2026-08-01T13:40:47+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -69,7 +69,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         ev: 38
       }
     },
-    {
+        {
       date: "2026-08-01",
       prices: {
         "100": 211,
@@ -88,7 +88,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 206,
+      yesterdayPrice: 211,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -105,7 +105,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 189,
+      yesterdayPrice: 199,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -122,7 +122,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 205,
+      yesterdayPrice: 211,
       name: {
         sq: "Naftë",
         en: "Diesel"
@@ -139,7 +139,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 218,
+      yesterdayPrice: 224,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
@@ -156,7 +156,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 66,
+      yesterdayPrice: 69,
       name: {
         sq: "Auto Gas",
         en: "Auto Gas"
