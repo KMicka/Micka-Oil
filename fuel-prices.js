@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-07-24T12:31:31+00:00",
+  updatedAt: "2026-08-01T13:40:44+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -68,6 +68,17 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         lpg: 66,
         ev: 38
       }
+    },
+    {
+      date: "2026-08-01",
+      prices: {
+        "100": 211,
+        "95": 199,
+        diesel: 211,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -86,7 +97,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Opsion premium për performancë më të lartë.",
         en: "Premium option for stronger performance."
       },
-      price: 206
+      price: 211
     },
     {
       id: "95",
@@ -103,7 +114,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 189
+      price: 199
     },
     {
       id: "diesel",
@@ -120,7 +131,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 205
+      price: 211
     },
     {
       id: "diesel-shell",
@@ -137,7 +148,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long-distance trips."
       },
-      price: 218
+      price: 224
     },
     {
       id: "lpg",
@@ -154,7 +165,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Alternativë ekonomike për përdorim të rregullt.",
         en: "Economic alternative for regular use."
       },
-      price: 66
+      price: 69
     },
     {
       id: "ev",
