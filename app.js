@@ -379,7 +379,7 @@ const defaultHomeFuelPriceBoard = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-08-01T13:40:44+00:00",
+  updatedAt: "2026-08-01T13:40:47+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -436,7 +436,7 @@ const defaultHomeFuelPriceBoard = {
         ev: 38
       }
     },
-    {
+        {
       date: "2026-08-01",
       prices: {
         "100": 211,
@@ -455,7 +455,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 206,
+      yesterdayPrice: 211,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Performancë premium dhe fuqi.",
@@ -469,7 +469,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 189,
+      yesterdayPrice: 199,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhje praktike për çdo ditë.",
@@ -483,7 +483,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 205,
+      yesterdayPrice: 211,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete dhe flota.",
@@ -497,7 +497,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 218,
+      yesterdayPrice: 224,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
@@ -514,7 +514,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 66,
+      yesterdayPrice: 69,
       name: { sq: "Auto Gas", en: "Auto Gas" },
       description: {
         sq: "Alternativë ekonomike dhe praktike.",
