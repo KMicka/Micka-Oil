@@ -18,14 +18,25 @@
 window.addEventListener("DOMContentLoaded", () => {
   const preloader = document.getElementById("preloader");
   const video = document.getElementById("preloadVideo");
+  const heroVideo = document.getElementById("heroVideo");
   const isHomePage = document.body.classList.contains("home-page");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hasSeenPreloader = sessionStorage.getItem("mickaPreloaderSeen") === "1";
   const saveDataEnabled = navigator.connection && navigator.connection.saveData;
 
-  if (!preloader) return;
+  const startHeroVideo = () => {
+    if (!heroVideo) return;
+    heroVideo.currentTime = 0;
+    heroVideo.play().catch(() => {});
+  };
+
+  if (!preloader) {
+    startHeroVideo();
+    return;
+  }
   if (!isHomePage || hasSeenPreloader || prefersReducedMotion || saveDataEnabled || document.visibilityState === "hidden") {
     preloader.remove();
+    startHeroVideo();
     return;
   }
 
@@ -35,6 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
     isHidden = true;
     sessionStorage.setItem("mickaPreloaderSeen", "1");
     preloader.classList.add("hidden");
+    startHeroVideo();
 
     setTimeout(() => {
       preloader.remove();
@@ -73,6 +85,38 @@ window.addEventListener("DOMContentLoaded", () => {
       clearTimeout(safetyTimer);
       hidePreloader();
     }
+  });
+});
+
+// Full-screen cinematic video hero controls.
+document.addEventListener("DOMContentLoaded", () => {
+  const hero = document.getElementById("videoHero");
+  const video = document.getElementById("heroVideo");
+  const playButton = document.getElementById("heroPlayButton");
+  const muteButton = document.getElementById("heroMuteButton");
+  const fullscreenButton = document.getElementById("heroFullscreenButton");
+  const progress = document.getElementById("heroProgress");
+  if (!hero || !video) return;
+
+  playButton?.addEventListener("click", async () => {
+    if (video.paused) await video.play(); else video.pause();
+    const paused = video.paused;
+    playButton.innerHTML = `<i class="fa-solid fa-${paused ? "play" : "pause"}"></i>`;
+    playButton.setAttribute("aria-label", paused ? "Luaj videon" : "Ndalo videon");
+  });
+
+  muteButton?.addEventListener("click", () => {
+    video.muted = !video.muted;
+    muteButton.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? "xmark" : "high"}"></i>`;
+    muteButton.setAttribute("aria-label", video.muted ? "Aktivizo zërin" : "Çaktivizo zërin");
+  });
+
+  fullscreenButton?.addEventListener("click", async () => {
+    if (!document.fullscreenElement) await hero.requestFullscreen?.(); else await document.exitFullscreen?.();
+  });
+
+  video.addEventListener("timeupdate", () => {
+    if (progress && video.duration) progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
   });
 });
 
