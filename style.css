@@ -30,16 +30,22 @@
 /* Homepage products hero: stronger desktop scale and better column balance. */
 @media (min-width: 1181px) {
   body.home-page .products-showcase .products-hero-panel {
-    grid-template-columns: minmax(430px, .72fr) minmax(680px, 1.28fr);
-    min-height: 590px;
-    gap: clamp(36px, 4vw, 68px);
-    padding: clamp(34px, 3vw, 48px);
+    grid-template-columns: minmax(500px, .82fr) minmax(650px, 1.18fr);
+    min-height: 550px;
+    gap: clamp(38px, 3.4vw, 58px);
+    padding: clamp(34px, 2.7vw, 44px);
+  }
+
+  body.home-page .products-showcase .products-hero-copy h2 {
+    max-width: 650px;
+    font-size: clamp(3.15rem, 3.15vw, 3.75rem);
+    line-height: 1.06;
   }
 
   body.home-page .products-showcase .products-hero-media,
   body.home-page .products-showcase .products-hero-media img {
-    height: 500px;
-    min-height: 500px;
+    height: 460px;
+    min-height: 460px;
   }
 
   body.home-page .products-showcase .products-hero-media img {
