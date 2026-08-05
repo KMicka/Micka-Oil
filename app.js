@@ -18,25 +18,14 @@
 window.addEventListener("DOMContentLoaded", () => {
   const preloader = document.getElementById("preloader");
   const video = document.getElementById("preloadVideo");
-  const heroVideo = document.getElementById("heroVideo");
   const isHomePage = document.body.classList.contains("home-page");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hasSeenPreloader = sessionStorage.getItem("mickaPreloaderSeen") === "1";
   const saveDataEnabled = navigator.connection && navigator.connection.saveData;
 
-  const startHeroVideo = () => {
-    if (!heroVideo) return;
-    heroVideo.currentTime = 0;
-    heroVideo.play().catch(() => {});
-  };
-
-  if (!preloader) {
-    startHeroVideo();
-    return;
-  }
+  if (!preloader) return;
   if (!isHomePage || hasSeenPreloader || prefersReducedMotion || saveDataEnabled || document.visibilityState === "hidden") {
     preloader.remove();
-    startHeroVideo();
     return;
   }
 
@@ -46,7 +35,6 @@ window.addEventListener("DOMContentLoaded", () => {
     isHidden = true;
     sessionStorage.setItem("mickaPreloaderSeen", "1");
     preloader.classList.add("hidden");
-    startHeroVideo();
 
     setTimeout(() => {
       preloader.remove();
@@ -85,38 +73,6 @@ window.addEventListener("DOMContentLoaded", () => {
       clearTimeout(safetyTimer);
       hidePreloader();
     }
-  });
-});
-
-// Full-screen cinematic video hero controls.
-document.addEventListener("DOMContentLoaded", () => {
-  const hero = document.getElementById("videoHero");
-  const video = document.getElementById("heroVideo");
-  const playButton = document.getElementById("heroPlayButton");
-  const muteButton = document.getElementById("heroMuteButton");
-  const fullscreenButton = document.getElementById("heroFullscreenButton");
-  const progress = document.getElementById("heroProgress");
-  if (!hero || !video) return;
-
-  playButton?.addEventListener("click", async () => {
-    if (video.paused) await video.play(); else video.pause();
-    const paused = video.paused;
-    playButton.innerHTML = `<i class="fa-solid fa-${paused ? "play" : "pause"}"></i>`;
-    playButton.setAttribute("aria-label", paused ? "Luaj videon" : "Ndalo videon");
-  });
-
-  muteButton?.addEventListener("click", () => {
-    video.muted = !video.muted;
-    muteButton.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? "xmark" : "high"}"></i>`;
-    muteButton.setAttribute("aria-label", video.muted ? "Aktivizo zërin" : "Çaktivizo zërin");
-  });
-
-  fullscreenButton?.addEventListener("click", async () => {
-    if (!document.fullscreenElement) await hero.requestFullscreen?.(); else await document.exitFullscreen?.();
-  });
-
-  video.addEventListener("timeupdate", () => {
-    if (progress && video.duration) progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
   });
 });
 
@@ -423,7 +379,7 @@ const defaultHomeFuelPriceBoard = {
     en: "Tirana"
   },
   exchangeRate: 92,
-  updatedAt: "2026-08-02T08:08:33+00:00",
+  updatedAt: "2026-08-05T08:50:06+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -501,6 +457,17 @@ const defaultHomeFuelPriceBoard = {
         lpg: 69,
         ev: 38
       }
+    },
+    {
+      date: "2026-08-05",
+      prices: {
+        "100": 214,
+        "95": 189,
+        diesel: 199,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -510,7 +477,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 211,
+      yesterdayPrice: 214,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Performancë premium dhe fuqi.",
@@ -530,7 +497,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Zgjedhje praktike për çdo ditë.",
         en: "A practical choice for every day."
       },
-      price: 199
+      price: 189
     },
     {
       id: "diesel",
@@ -544,7 +511,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Ideale për automjete dhe flota.",
         en: "Ideal for vehicles and fleets."
       },
-      price: 211
+      price: 199
     },
     {
       id: "diesel-shell",
