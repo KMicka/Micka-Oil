@@ -379,7 +379,7 @@ const defaultHomeFuelPriceBoard = {
     en: "Tirana"
   },
   exchangeRate: 91,
-  updatedAt: "2026-08-13T07:06:19+00:00",
+  updatedAt: "2026-08-13T07:06:22+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -469,7 +469,7 @@ const defaultHomeFuelPriceBoard = {
         ev: 38
       }
     },
-    {
+        {
       date: "2026-08-13",
       prices: {
         "100": 214,
@@ -502,7 +502,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 189,
+      yesterdayPrice: 198,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhje praktike për çdo ditë.",
@@ -516,7 +516,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 199,
+      yesterdayPrice: 215,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete dhe flota.",
