@@ -48,7 +48,8 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  video.preload = "metadata";
+  video.preload = "auto";
+  video.load();
   video.play().catch((err) => {
     console.warn("Preloader video failed to play:", err);
   });
@@ -75,6 +76,27 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// Warm the browser cache after the first screen is ready. This keeps the hero
+// responsive while making off-screen photos and gallery videos appear promptly.
+window.addEventListener("load", () => {
+  const warmMediaCache = () => {
+    document.querySelectorAll('img[loading="lazy"]').forEach((image) => {
+      image.loading = "eager";
+    });
+
+    document.querySelectorAll("video").forEach((video) => {
+      if (video.preload !== "auto") video.preload = "auto";
+      if (video.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) video.load();
+    });
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(warmMediaCache, { timeout: 1200 });
+  } else {
+    window.setTimeout(warmMediaCache, 250);
+  }
+}, { once: true });
 
 // =========================================================
 // 02. MOBILE MENU
@@ -155,13 +177,21 @@ let items = document.querySelectorAll(".list .item");
 let thumbs = document.querySelectorAll(".thumbnail .item");
 let next = document.getElementById("next");
 let prev = document.getElementById("prev");
+let slider = document.getElementById("slider");
+let thumbTrack = document.getElementById("thumbs");
 let active = 0;
 let autoplay;
+let touchStartX = 0;
 
-function changeSlide(index) {
-  if (!items.length || !thumbs.length) return;
+items.forEach((item) => {
+  const image = item.querySelector("img");
+  if (image) item.style.setProperty("--slide-image", `url("${image.getAttribute("src")}")`);
+});
+
+function changeSlide(index, requestedDirection) {
+  if (!items.length) return;
   const nextIndex = (index + items.length) % items.length;
-  const direction = nextIndex > active || (active === items.length - 1 && nextIndex === 0) ? "next" : "prev";
+  const direction = requestedDirection || (nextIndex > active || (active === items.length - 1 && nextIndex === 0) ? "next" : "prev");
 
   items.forEach((item, i) => {
     item.classList.remove("active", "is-entering-next", "is-entering-prev", "is-leaving-next", "is-leaving-prev");
@@ -172,8 +202,20 @@ function changeSlide(index) {
   });
 
   items[nextIndex].classList.add("active", direction === "next" ? "is-entering-next" : "is-entering-prev");
-  if (thumbs[nextIndex]) thumbs[nextIndex].classList.add("active");
+  items.forEach((item, i) => item.setAttribute("aria-hidden", i === nextIndex ? "false" : "true"));
+  if (thumbs[nextIndex]) {
+    thumbs[nextIndex].classList.add("active");
+    thumbs[nextIndex].setAttribute("aria-current", "true");
+    if (thumbTrack) {
+      const centeredLeft = thumbs[nextIndex].offsetLeft - (thumbTrack.clientWidth - thumbs[nextIndex].offsetWidth) / 2;
+      thumbTrack.scrollTo({ left: Math.max(0, centeredLeft), behavior: "smooth" });
+    }
+  }
+  thumbs.forEach((thumb, i) => {
+    if (i !== nextIndex) thumb.removeAttribute("aria-current");
+  });
   active = nextIndex;
+  if (slider) slider.scrollLeft = 0;
 
   window.setTimeout(() => {
     items.forEach((item) => {
@@ -183,29 +225,75 @@ function changeSlide(index) {
 }
 
 function startAutoplay() {
-  if (!next || !items.length) return;
+  if (!next || !items.length || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   stopAutoplay();
-  autoplay = setInterval(() => next.click(), 7000);
+  autoplay = setInterval(() => changeSlide(active + 1, "next"), 7000);
 }
 
 function stopAutoplay() {
   clearInterval(autoplay);
 }
 
-if (next && prev && items.length && thumbs.length) {
+if (next && prev && items.length) {
   next.onclick = () => {
-    active = (active + 1) % items.length;
-    changeSlide(active);
+    changeSlide(active + 1, "next");
+    startAutoplay();
   };
 
   prev.onclick = () => {
-    active = (active - 1 + items.length) % items.length;
-    changeSlide(active);
+    changeSlide(active - 1, "prev");
+    startAutoplay();
   };
 
   thumbs.forEach((thumb, i) => {
-    thumb.addEventListener("click", () => changeSlide(i));
+    const slideAlt = items[i]?.querySelector("img")?.alt || `Pamja ${i + 1}`;
+    thumb.setAttribute("role", "button");
+    thumb.setAttribute("tabindex", "0");
+    thumb.setAttribute("aria-label", `Shfaq: ${slideAlt}`);
+    thumb.addEventListener("click", () => {
+      changeSlide(i);
+      startAutoplay();
+    });
+    thumb.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        changeSlide(i);
+        startAutoplay();
+      }
+    });
   });
+
+  items.forEach((item, i) => item.setAttribute("aria-hidden", i === active ? "false" : "true"));
+  if (thumbs[active]) thumbs[active].setAttribute("aria-current", "true");
+
+  slider?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      next.click();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      prev.click();
+    }
+  });
+
+  slider?.addEventListener("mouseenter", stopAutoplay);
+  slider?.addEventListener("mouseleave", startAutoplay);
+  slider?.addEventListener("focusin", stopAutoplay);
+  slider?.addEventListener("focusout", (event) => {
+    if (!slider.contains(event.relatedTarget)) startAutoplay();
+  });
+  slider?.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+    stopAutoplay();
+  }, { passive: true });
+  slider?.addEventListener("touchend", (event) => {
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(distance) > 50) {
+      distance < 0 ? next.click() : prev.click();
+    } else {
+      startAutoplay();
+    }
+  }, { passive: true });
 
   startAutoplay();
 
@@ -378,8 +466,8 @@ const defaultHomeFuelPriceBoard = {
     sq: "Tiranë",
     en: "Tirana"
   },
-  exchangeRate: 91,
-  updatedAt: "2026-08-13T07:06:33+00:00",
+  exchangeRate: 92,
+  updatedAt: "2026-07-22T10:28:56+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -414,7 +502,7 @@ const defaultHomeFuelPriceBoard = {
         ev: 38
       }
     },
-        {
+    {
       date: "2026-07-22",
       prices: {
         "100": 206,
@@ -422,61 +510,6 @@ const defaultHomeFuelPriceBoard = {
         diesel: 205,
         "diesel-shell": 212,
         lpg: 66,
-        ev: 38
-      }
-    },
-                                {
-      date: "2026-07-24",
-      prices: {
-        "100": 206,
-        "95": 189,
-        diesel: 205,
-        "diesel-shell": 218,
-        lpg: 66,
-        ev: 38
-      }
-    },
-        {
-      date: "2026-08-01",
-      prices: {
-        "100": 211,
-        "95": 199,
-        diesel: 211,
-        "diesel-shell": 224,
-        lpg: 69,
-        ev: 38
-      }
-    },
-    {
-      date: "2026-08-02",
-      prices: {
-        "100": 214,
-        "95": 199,
-        diesel: 211,
-        "diesel-shell": 224,
-        lpg: 69,
-        ev: 38
-      }
-    },
-    {
-      date: "2026-08-05",
-      prices: {
-        "100": 214,
-        "95": 189,
-        diesel: 199,
-        "diesel-shell": 224,
-        lpg: 69,
-        ev: 38
-      }
-    },
-                        {
-      date: "2026-08-13",
-      prices: {
-        "100": 214,
-        "95": 198,
-        diesel: 215,
-        "diesel-shell": 224,
-        lpg: 69,
         ev: 38
       }
     }
@@ -488,13 +521,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 214,
+      yesterdayPrice: 206,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Performancë premium dhe fuqi.",
         en: "Premium performance and power."
       },
-      price: 214
+      price: 206
     },
     {
       id: "95",
@@ -502,13 +535,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 198,
+      yesterdayPrice: 189,
       name: { sq: "Benzinë", en: "Gasoline" },
       description: {
         sq: "Zgjedhje praktike për çdo ditë.",
         en: "A practical choice for every day."
       },
-      price: 198
+      price: 189
     },
     {
       id: "diesel",
@@ -516,13 +549,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 215,
+      yesterdayPrice: 206,
       name: { sq: "Naftë", en: "Diesel" },
       description: {
         sq: "Ideale për automjete dhe flota.",
         en: "Ideal for vehicles and fleets."
       },
-      price: 215
+      price: 205
     },
     {
       id: "diesel-shell",
@@ -530,7 +563,7 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 224,
+      yesterdayPrice: 212,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
@@ -539,7 +572,7 @@ const defaultHomeFuelPriceBoard = {
         sq: "Për flota dhe udhëtime të gjata.",
         en: "For fleets and long journeys."
       },
-      price: 224
+      price: 212
     },
     {
       id: "lpg",
@@ -547,13 +580,13 @@ const defaultHomeFuelPriceBoard = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 69,
+      yesterdayPrice: 66,
       name: { sq: "Auto Gas", en: "Auto Gas" },
       description: {
         sq: "Alternativë ekonomike dhe praktike.",
         en: "An economical, practical alternative."
       },
-      price: 69
+      price: 66
     },
     {
       id: "ev",
@@ -1810,7 +1843,7 @@ document.addEventListener("click", () => {
 
   function mediaMarkup(item, eager = false) {
     if (isVideo(item)) {
-      return `<video src="${item.src}" muted playsinline preload="metadata" data-thumb-time="${item.thumbTime || 1}"></video><span class="g-video-caption">${item.cap}</span><span class="g-media-play"><i class="fa-solid fa-play"></i></span>`;
+      return `<video src="${item.src}" muted playsinline preload="auto" data-thumb-time="${item.thumbTime || 1}"></video><span class="g-video-caption">${item.cap}</span><span class="g-media-play"><i class="fa-solid fa-play"></i></span>`;
     }
     return `<img src="${item.src}" alt="${item.cap}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
   }
@@ -1830,7 +1863,7 @@ document.addEventListener("click", () => {
 
   function renderGrid() {
     grid.innerHTML = IMGS.map((item, idx) => `
-      <div class="g-card g-card--loading ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}">
+      <div class="g-card g-card--loading ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}" role="button" tabindex="0" aria-label="${item.cap}">
         ${mediaMarkup(item, idx < 4)}
         <span class="g-card__loader" role="status"><i aria-hidden="true"></i><span>Duke ngarkuar</span></span>
         <div class="g-card__overlay"><div class="g-card__icon"><i class="fa-solid fa-expand"></i></div></div>
@@ -2076,6 +2109,15 @@ document.addEventListener("click", () => {
     if (pi >= 0) open(pi);
   });
 
+  document.addEventListener('keydown', e => {
+    if (lbOpen || (e.key !== 'Enter' && e.key !== ' ')) return;
+    const el = e.target.closest('.g-card[data-idx]');
+    if (!el) return;
+    e.preventDefault();
+    const pi = pool.indexOf(Number.parseInt(el.dataset.idx, 10));
+    if (pi >= 0) open(pi);
+  });
+
   /* ─────────────────────────────────────────
      06G. INITIAL RENDER
      Mobile menu behavior is handled once in app.js.
@@ -2099,3 +2141,36 @@ document.addEventListener("click", () => {
 
 
 
+// Full-screen cinematic video hero controls.
+document.addEventListener("DOMContentLoaded", () => {
+  const hero = document.getElementById("videoHero");
+  const video = document.getElementById("heroVideo");
+  const playButton = document.getElementById("heroPlayButton");
+  const muteButton = document.getElementById("heroMuteButton");
+  const fullscreenButton = document.getElementById("heroFullscreenButton");
+  const progress = document.getElementById("heroProgress");
+  if (!hero || !video) return;
+
+  playButton?.addEventListener("click", async () => {
+    if (video.paused) await video.play();
+    else video.pause();
+    const paused = video.paused;
+    playButton.innerHTML = `<i class="fa-solid fa-${paused ? "play" : "pause"}"></i>`;
+    playButton.setAttribute("aria-label", paused ? "Luaj videon" : "Ndalo videon");
+  });
+
+  muteButton?.addEventListener("click", () => {
+    video.muted = !video.muted;
+    muteButton.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? "xmark" : "high"}"></i>`;
+    muteButton.setAttribute("aria-label", video.muted ? "Aktivizo zërin" : "Çaktivizo zërin");
+  });
+
+  fullscreenButton?.addEventListener("click", async () => {
+    if (!document.fullscreenElement) await hero.requestFullscreen?.();
+    else await document.exitFullscreen?.();
+  });
+
+  video.addEventListener("timeupdate", () => {
+    if (progress && video.duration) progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
+  });
+});
