@@ -11,8 +11,8 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     sq: "Tiranë",
     en: "Tirana"
   },
-  exchangeRate: 92,
-  updatedAt: "2026-07-22T10:28:56+00:00",
+  exchangeRate: 91,
+  updatedAt: "2026-08-22T08:19:17+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -47,7 +47,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         ev: 38
       }
     },
-    {
+        {
       date: "2026-07-22",
       prices: {
         "100": 206,
@@ -55,6 +55,72 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         diesel: 205,
         "diesel-shell": 212,
         lpg: 66,
+        ev: 38
+      }
+    },
+                                {
+      date: "2026-07-24",
+      prices: {
+        "100": 206,
+        "95": 189,
+        diesel: 205,
+        "diesel-shell": 218,
+        lpg: 66,
+        ev: 38
+      }
+    },
+        {
+      date: "2026-08-01",
+      prices: {
+        "100": 211,
+        "95": 199,
+        diesel: 211,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
+    },
+    {
+      date: "2026-08-02",
+      prices: {
+        "100": 214,
+        "95": 199,
+        diesel: 211,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
+    },
+    {
+      date: "2026-08-05",
+      prices: {
+        "100": 214,
+        "95": 189,
+        diesel: 199,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
+    },
+                        {
+      date: "2026-08-13",
+      prices: {
+        "100": 214,
+        "95": 198,
+        diesel: 215,
+        "diesel-shell": 224,
+        lpg: 69,
+        ev: 38
+      }
+    },
+    {
+      date: "2026-08-22",
+      prices: {
+        "100": 215,
+        "95": 205,
+        diesel: 219,
+        "diesel-shell": 229,
+        lpg: 69,
         ev: 38
       }
     }
@@ -66,16 +132,16 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 206,
+      yesterdayPrice: 214,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
       },
       description: {
-        sq: "Performancë premium dhe fuqi.",
-        en: "Premium performance and power."
+        sq: "Opsion premium për performancë më të lartë.",
+        en: "Premium option for stronger performance."
       },
-      price: 206
+      price: 215
     },
     {
       id: "95",
@@ -83,16 +149,16 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 189,
+      yesterdayPrice: 198,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
       },
       description: {
-        sq: "Zgjedhje praktike për çdo ditë.",
-        en: "A practical choice for every day."
+        sq: "Zgjedhja praktike për përdorim të përditshëm.",
+        en: "Practical choice for everyday use."
       },
-      price: 189
+      price: 205
     },
     {
       id: "diesel",
@@ -100,16 +166,16 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 206,
+      yesterdayPrice: 215,
       name: {
         sq: "Naftë",
         en: "Diesel"
       },
       description: {
-        sq: "Ideale për automjete dhe flota.",
-        en: "Ideal for vehicles and fleets."
+        sq: "Ideale për automjete, furgonë dhe flota.",
+        en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 205
+      price: 219
     },
     {
       id: "diesel-shell",
@@ -117,16 +183,16 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 212,
+      yesterdayPrice: 224,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
       },
       description: {
         sq: "Për flota dhe udhëtime të gjata.",
-        en: "For fleets and long journeys."
+        en: "For fleets and long-distance trips."
       },
-      price: 212
+      price: 229
     },
     {
       id: "lpg",
@@ -134,16 +200,16 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-fire-flame-simple",
       accent: "red",
       theme: "sky",
-      yesterdayPrice: 66,
+      yesterdayPrice: 69,
       name: {
         sq: "Auto Gas",
         en: "Auto Gas"
       },
       description: {
-        sq: "Alternativë ekonomike dhe praktike.",
-        en: "An economical, practical alternative."
+        sq: "Alternativë ekonomike për përdorim të rregullt.",
+        en: "Economic alternative for regular use."
       },
-      price: 66
+      price: 69
     },
     {
       id: "ev",
@@ -157,8 +223,8 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         en: "EV Charging"
       },
       description: {
-        sq: "Karikim i pastër me çmim për kW.",
-        en: "Clean charging with pricing per kW."
+        sq: "Karikim për automjete elektrike me çmim për kilovat.",
+        en: "Charging for electric vehicles priced per kilowatt."
       },
       price: 38
     }
