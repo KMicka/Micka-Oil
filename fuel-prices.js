@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 91,
-  updatedAt: "2026-09-12T23:54:31+00:00",
+  updatedAt: "2026-09-22T18:10:36+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -145,6 +145,17 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         lpg: 69,
         ev: 38
       }
+    },
+    {
+      date: "2026-09-22",
+      prices: {
+        "100": 231,
+        "95": 193,
+        diesel: 213,
+        "diesel-shell": 238,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -154,7 +165,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gauge-high",
       accent: "red",
       theme: "red",
-      yesterdayPrice: 215,
+      yesterdayPrice: 231,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -171,7 +182,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 205,
+      yesterdayPrice: 219,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -180,7 +191,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 219
+      price: 193
     },
     {
       id: "diesel",
@@ -188,7 +199,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 219,
+      yesterdayPrice: 229,
       name: {
         sq: "Naftë",
         en: "Diesel"
@@ -197,7 +208,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 229
+      price: 213
     },
     {
       id: "diesel-shell",
@@ -205,7 +216,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-truck-front",
       accent: "red",
       theme: "yellow",
-      yesterdayPrice: 229,
+      yesterdayPrice: 238,
       name: {
         sq: "EXTRA DIEZEL SHELL",
         en: "EXTRA DIESEL SHELL"
