@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 91,
-  updatedAt: "2026-09-22T18:10:36+00:00",
+  updatedAt: "2026-10-15T16:58:14+00:00",
   history: [
     {
       date: "2026-06-01",
@@ -156,6 +156,17 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         lpg: 69,
         ev: 38
       }
+    },
+    {
+      date: "2026-10-15",
+      prices: {
+        "100": 231,
+        "95": 190,
+        diesel: 213,
+        "diesel-shell": 238,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -182,7 +193,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-car-side",
       accent: "amber",
       theme: "green",
-      yesterdayPrice: 219,
+      yesterdayPrice: 193,
       name: {
         sq: "Benzinë",
         en: "Gasoline"
@@ -191,7 +202,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 193
+      price: 190
     },
     {
       id: "diesel",
@@ -199,7 +210,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
       icon: "fa-gas-pump",
       accent: "amber",
       theme: "navy",
-      yesterdayPrice: 229,
+      yesterdayPrice: 213,
       name: {
         sq: "Naftë",
         en: "Diesel"
