@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://micka.al/images/punonjes%20me%20logo.jpg" />
 
   <link rel="icon" href="images/logo.png" />
-  <link rel="stylesheet" href="style.css?v=20260819-navbar-unified" />
+  <link rel="stylesheet" href="style.css?v=20261111-final-fixes" />
 
   <link
     rel="stylesheet"
@@ -204,6 +204,7 @@
         </div>
 
         <button class="btn" type="submit" data-lang="form_submit">Dergo</button>
+        <p class="contact-commercial__form-status" id="contactFormStatus" role="status" aria-live="polite" hidden></p>
       </form>
 
       <div class="contact-commercial__footer">
@@ -282,21 +283,28 @@
 </footer>
 
 <!-- 04. SCRIPTS -->
-<script src="language.js?v=20260718-14"></script>
+<script src="language.js?v=20260826-16"></script>
 <script>
   (() => {
     const form = document.querySelector("[data-web3forms-form]");
     if (!form) return;
+    const status = document.getElementById("contactFormStatus");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const submitButton = form.querySelector('button[type="submit"]');
       const originalText = submitButton ? submitButton.textContent : "";
+      const isEnglish = localStorage.getItem("language") === "en";
+
+      if (status) {
+        status.hidden = true;
+        status.textContent = "";
+      }
 
       if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = "Sending...";
+        submitButton.textContent = isEnglish ? "Sending..." : "Duke dërguar...";
       }
 
       try {
@@ -315,8 +323,13 @@
 
         window.location.href = form.querySelector('input[name="redirect"]')?.value || "thankyou.html";
       } catch (error) {
-        alert("Mesazhi nuk u dergua. Ju lutemi provoni perseri ose na kontaktoni direkt me email.");
-
+        if (status) {
+          status.textContent = isEnglish
+            ? "Your message could not be sent. Please try again or email info@mickaoil.al."
+            : "Mesazhi nuk u dërgua. Provoni përsëri ose shkruani te info@mickaoil.al.";
+          status.hidden = false;
+        }
+      } finally {
         if (submitButton) {
           submitButton.disabled = false;
           submitButton.textContent = originalText;

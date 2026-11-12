@@ -1,4 +1,4 @@
-﻿// =========================================================
+// =========================================================
 // MICKA OIL WEBSITE SCRIPTS
 // ---------------------------------------------------------
 // 01. Preloader
@@ -15,17 +15,40 @@
 // =========================================================
 // 01. PRELOADER
 // =========================================================
+async function activateHeroVideo(force = false) {
+  const video = document.getElementById("heroVideo");
+  const source = video?.querySelector("source[data-src]");
+  if (!video || !source) return;
+
+  const connection = navigator.connection;
+  const slowConnection = ["slow-2g", "2g"].includes(connection?.effectiveType);
+  if (!force && (connection?.saveData || slowConnection || window.matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+
+  if (!source.src) {
+    source.src = source.dataset.src;
+    video.load();
+  }
+  try {
+    await video.play();
+  } catch (err) {
+    console.warn("Hero video unavailable; showing poster:", err);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   const preloader = document.getElementById("preloader");
   const video = document.getElementById("preloadVideo");
   const isHomePage = document.body.classList.contains("home-page");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const hasSeenPreloader = sessionStorage.getItem("mickaPreloaderSeen") === "1";
+  const preloaderSessionKey = "mickaPreloaderSeenAnimation";
+  const hasSeenPreloader = sessionStorage.getItem(preloaderSessionKey) === "1";
   const saveDataEnabled = navigator.connection && navigator.connection.saveData;
+  const slowConnection = ["slow-2g", "2g"].includes(navigator.connection?.effectiveType);
 
   if (!preloader) return;
-  if (!isHomePage || hasSeenPreloader || prefersReducedMotion || saveDataEnabled || document.visibilityState === "hidden") {
+  if (!isHomePage || hasSeenPreloader || prefersReducedMotion || saveDataEnabled || slowConnection || document.visibilityState === "hidden") {
     preloader.remove();
+    activateHeroVideo();
     return;
   }
 
@@ -33,25 +56,22 @@ window.addEventListener("DOMContentLoaded", () => {
   const hidePreloader = () => {
     if (isHidden) return;
     isHidden = true;
-    sessionStorage.setItem("mickaPreloaderSeen", "1");
+    sessionStorage.setItem(preloaderSessionKey, "1");
     preloader.classList.add("hidden");
+    activateHeroVideo();
 
     setTimeout(() => {
       preloader.remove();
-    }, 450);
+    }, 850);
   };
 
-  const safetyTimer = setTimeout(hidePreloader, 2200);
+  // Only use this timer if the logo video never finishes.
+  const safetyTimer = setTimeout(hidePreloader, 25000);
 
   if (!video) {
     hidePreloader();
     return;
   }
-
-  video.preload = "metadata";
-  video.play().catch((err) => {
-    console.warn("Preloader video failed to play:", err);
-  });
 
   video.addEventListener("ended", () => {
     clearTimeout(safetyTimer);
@@ -63,10 +83,15 @@ window.addEventListener("DOMContentLoaded", () => {
     hidePreloader();
   }, { once: true });
 
-  video.addEventListener("stalled", () => {
+  const videoSource = video.querySelector("source[data-src]");
+  if (videoSource) videoSource.src = videoSource.dataset.src;
+  video.preload = "auto";
+  video.load();
+  video.play().catch((err) => {
+    console.warn("Preloader video failed to play:", err);
     clearTimeout(safetyTimer);
     hidePreloader();
-  }, { once: true });
+  });
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
@@ -155,13 +180,21 @@ let items = document.querySelectorAll(".list .item");
 let thumbs = document.querySelectorAll(".thumbnail .item");
 let next = document.getElementById("next");
 let prev = document.getElementById("prev");
+let slider = document.getElementById("slider");
+let thumbTrack = document.getElementById("thumbs");
 let active = 0;
 let autoplay;
+let touchStartX = 0;
 
-function changeSlide(index) {
-  if (!items.length || !thumbs.length) return;
+items.forEach((item) => {
+  const image = item.querySelector("img");
+  if (image) item.style.setProperty("--slide-image", `url("${image.getAttribute("src")}")`);
+});
+
+function changeSlide(index, requestedDirection) {
+  if (!items.length) return;
   const nextIndex = (index + items.length) % items.length;
-  const direction = nextIndex > active || (active === items.length - 1 && nextIndex === 0) ? "next" : "prev";
+  const direction = requestedDirection || (nextIndex > active || (active === items.length - 1 && nextIndex === 0) ? "next" : "prev");
 
   items.forEach((item, i) => {
     item.classList.remove("active", "is-entering-next", "is-entering-prev", "is-leaving-next", "is-leaving-prev");
@@ -172,8 +205,20 @@ function changeSlide(index) {
   });
 
   items[nextIndex].classList.add("active", direction === "next" ? "is-entering-next" : "is-entering-prev");
-  if (thumbs[nextIndex]) thumbs[nextIndex].classList.add("active");
+  items.forEach((item, i) => item.setAttribute("aria-hidden", i === nextIndex ? "false" : "true"));
+  if (thumbs[nextIndex]) {
+    thumbs[nextIndex].classList.add("active");
+    thumbs[nextIndex].setAttribute("aria-current", "true");
+    if (thumbTrack) {
+      const centeredLeft = thumbs[nextIndex].offsetLeft - (thumbTrack.clientWidth - thumbs[nextIndex].offsetWidth) / 2;
+      thumbTrack.scrollTo({ left: Math.max(0, centeredLeft), behavior: "smooth" });
+    }
+  }
+  thumbs.forEach((thumb, i) => {
+    if (i !== nextIndex) thumb.removeAttribute("aria-current");
+  });
   active = nextIndex;
+  if (slider) slider.scrollLeft = 0;
 
   window.setTimeout(() => {
     items.forEach((item) => {
@@ -183,29 +228,75 @@ function changeSlide(index) {
 }
 
 function startAutoplay() {
-  if (!next || !items.length) return;
+  if (!next || !items.length || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   stopAutoplay();
-  autoplay = setInterval(() => next.click(), 7000);
+  autoplay = setInterval(() => changeSlide(active + 1, "next"), 7000);
 }
 
 function stopAutoplay() {
   clearInterval(autoplay);
 }
 
-if (next && prev && items.length && thumbs.length) {
+if (next && prev && items.length) {
   next.onclick = () => {
-    active = (active + 1) % items.length;
-    changeSlide(active);
+    changeSlide(active + 1, "next");
+    startAutoplay();
   };
 
   prev.onclick = () => {
-    active = (active - 1 + items.length) % items.length;
-    changeSlide(active);
+    changeSlide(active - 1, "prev");
+    startAutoplay();
   };
 
   thumbs.forEach((thumb, i) => {
-    thumb.addEventListener("click", () => changeSlide(i));
+    const slideAlt = items[i]?.querySelector("img")?.alt || `Pamja ${i + 1}`;
+    thumb.setAttribute("role", "button");
+    thumb.setAttribute("tabindex", "0");
+    thumb.setAttribute("aria-label", `Shfaq: ${slideAlt}`);
+    thumb.addEventListener("click", () => {
+      changeSlide(i);
+      startAutoplay();
+    });
+    thumb.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        changeSlide(i);
+        startAutoplay();
+      }
+    });
   });
+
+  items.forEach((item, i) => item.setAttribute("aria-hidden", i === active ? "false" : "true"));
+  if (thumbs[active]) thumbs[active].setAttribute("aria-current", "true");
+
+  slider?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      next.click();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      prev.click();
+    }
+  });
+
+  slider?.addEventListener("mouseenter", stopAutoplay);
+  slider?.addEventListener("mouseleave", startAutoplay);
+  slider?.addEventListener("focusin", stopAutoplay);
+  slider?.addEventListener("focusout", (event) => {
+    if (!slider.contains(event.relatedTarget)) startAutoplay();
+  });
+  slider?.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+    stopAutoplay();
+  }, { passive: true });
+  slider?.addEventListener("touchend", (event) => {
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(distance) > 50) {
+      distance < 0 ? next.click() : prev.click();
+    } else {
+      startAutoplay();
+    }
+  }, { passive: true });
 
   startAutoplay();
 
@@ -373,13 +464,21 @@ function getCurrentLanguage() {
 
 // Home price board data is primarily loaded from fuel-prices.js.
 // Keep this fallback aligned so prices stay consistent if that file fails to load.
+// =========================================================
+// MICKA OIL FUEL PRICE DATA
+// ---------------------------------------------------------
+// Defines the live homepage fuel price board used by app.js.
+// Update manually or through update-prices.ps1.
+// =========================================================
+
+// 01. HOMEPAGE PRICE BOARD CONFIGURATION
 const defaultHomeFuelPriceBoard = {
   station: {
     sq: "Tiranë",
     en: "Tirana"
   },
   exchangeRate: 91,
-  updatedAt: "2026-10-15T16:59:01+00:00",
+  updatedAt: "2026-11-12T00:57:31-05:00",
   history: [
     {
       date: "2026-06-01",
@@ -534,6 +633,17 @@ const defaultHomeFuelPriceBoard = {
         lpg: 69,
         ev: 38
       }
+    },
+    {
+      date: "2026-11-12",
+      prices: {
+        "100": 231,
+        "95": 181,
+        diesel: 212,
+        "diesel-shell": 238,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -544,10 +654,13 @@ const defaultHomeFuelPriceBoard = {
       accent: "red",
       theme: "red",
       yesterdayPrice: 231,
-      name: { sq: "Benzinë", en: "Gasoline" },
+      name: {
+        sq: "Benzinë",
+        en: "Gasoline"
+      },
       description: {
-        sq: "Performancë premium dhe fuqi.",
-        en: "Premium performance and power."
+        sq: "Opsion premium për performancë më të lartë.",
+        en: "Premium option for stronger performance."
       },
       price: 231
     },
@@ -558,12 +671,15 @@ const defaultHomeFuelPriceBoard = {
       accent: "amber",
       theme: "green",
       yesterdayPrice: 190,
-      name: { sq: "Benzinë", en: "Gasoline" },
-      description: {
-        sq: "Zgjedhje praktike për çdo ditë.",
-        en: "A practical choice for every day."
+      name: {
+        sq: "Benzinë",
+        en: "Gasoline"
       },
-      price: 190
+      description: {
+        sq: "Zgjedhja praktike për përdorim të përditshëm.",
+        en: "Practical choice for everyday use."
+      },
+      price: 181
     },
     {
       id: "diesel",
@@ -572,12 +688,15 @@ const defaultHomeFuelPriceBoard = {
       accent: "amber",
       theme: "navy",
       yesterdayPrice: 213,
-      name: { sq: "Naftë", en: "Diesel" },
-      description: {
-        sq: "Ideale për automjete dhe flota.",
-        en: "Ideal for vehicles and fleets."
+      name: {
+        sq: "Naftë",
+        en: "Diesel"
       },
-      price: 213
+      description: {
+        sq: "Ideale për automjete, furgonë dhe flota.",
+        en: "Ideal for vehicles, vans, and fleets."
+      },
+      price: 212
     },
     {
       id: "diesel-shell",
@@ -592,7 +711,7 @@ const defaultHomeFuelPriceBoard = {
       },
       description: {
         sq: "Për flota dhe udhëtime të gjata.",
-        en: "For fleets and long journeys."
+        en: "For fleets and long-distance trips."
       },
       price: 238
     },
@@ -603,10 +722,13 @@ const defaultHomeFuelPriceBoard = {
       accent: "red",
       theme: "sky",
       yesterdayPrice: 69,
-      name: { sq: "Auto Gas", en: "Auto Gas" },
+      name: {
+        sq: "Auto Gas",
+        en: "Auto Gas"
+      },
       description: {
-        sq: "Alternativë ekonomike dhe praktike.",
-        en: "An economical, practical alternative."
+        sq: "Alternativë ekonomike për përdorim të rregullt.",
+        en: "Economic alternative for regular use."
       },
       price: 69
     },
@@ -617,10 +739,13 @@ const defaultHomeFuelPriceBoard = {
       accent: "red",
       theme: "electric",
       yesterdayPrice: 38,
-      name: { sq: "Karikim Elektrik", en: "EV Charging" },
+      name: {
+        sq: "Karikim Elektrik",
+        en: "EV Charging"
+      },
       description: {
-        sq: "Karikim i pastër me çmim për kW.",
-        en: "Clean charging with pricing per kW."
+        sq: "Karikim për automjete elektrike me çmim për kilovat.",
+        en: "Charging for electric vehicles priced per kilowatt."
       },
       price: 38
     }
@@ -972,8 +1097,10 @@ function renderHomeFuelHistory() {
   const latestValue = series[series.length - 1].value;
   const change = latestValue - firstValue;
   const changeDirection = change > 0 ? "up" : change < 0 ? "down" : "flat";
-  const changeLabel = `${change > 0 ? "+" : ""}${change} Lek`;
-  const unitLabel = product.id === "ev" ? "LEK / KW" : "LEK / LITËR";
+  const changeLabel = `${change > 0 ? "+" : ""}${change} ${lang === "en" ? "ALL" : "Lek"}`;
+  const unitLabel = product.id === "ev"
+    ? (lang === "en" ? "ALL / KW" : "LEK / KW")
+    : (lang === "en" ? "ALL / LITER" : "LEK / LITËR");
   const selectedName = getHomeFuelDisplayName(product, lang).replace("\n", " ");
   const labels = lang === "en"
     ? { current: "Current", change: "Period change", range: "Low / high" }
@@ -1287,6 +1414,7 @@ function generateLocationCards(map, infoWindow) {
   locations.forEach((loc) => {
     const card = document.createElement("article");
     card.className = "location-card";
+    card.id = `station-${loc.id}`;
     
     const translatedServices = loc.services.map(serviceKey => t[serviceKey]);
     const translatedHours = t[loc.hoursKey];
@@ -1372,6 +1500,13 @@ function generateLocationCards(map, infoWindow) {
   }
 
   enhancePremiumGeneratedContent(grid);
+
+  const stationId = decodeURIComponent(window.location.hash.slice(1));
+  if (stationId.startsWith("station-")) {
+    requestAnimationFrame(() => {
+      document.getElementById(stationId)?.scrollIntoView({ block: "start" });
+    });
+  }
 }
 
 // Render station information independently from the Google Maps API.
@@ -1796,12 +1931,12 @@ document.addEventListener("click", () => {
     { src: 'images/kavaje naten 2.jpg', cap: 'Kavajë — Natë', tags: ['night','station'] },
     { src: 'images/vark funizim 06.jpeg', cap: 'Furnizim mjetesh lundruese', tags: ['service'] },
     { src: 'images/pika tirane.jpg', cap: 'Pika Tiranë', tags: ['station'] },
-    { src: 'images/preload video.mp4', cap: 'Micka Oil — Prezantim', tags: ['video','station'], type: 'video', thumbTime: 1.5 },
+    { src: 'images/preload video.mp4', poster: 'images/gallery-logo-thumb.webp', cap: 'Micka Oil — Prezantim', tags: ['video','station'], type: 'video' },
     { src: 'images/transport.png', cap: 'Transport hidrokarburesh', tags: ['service'] },
     { src: 'images/MEMALIAJ NATEN.jpg', cap: 'Memaliaj — Ndriçim nate', tags: ['night','station'] },
     { src: 'images/micka_card_2.png', cap: 'Kartë VIP', tags: ['loyalty'] },
     { src: 'images/patos.jpg', cap: 'Patos — Stacion', tags: ['station'] },
-    { src: 'images/video furnizim.mp4', cap: 'Furnizim me karburant', tags: ['video','service'], type: 'video', thumbTime: 6 },
+    { src: 'images/video furnizim.mp4', poster: 'images/gallery-fuel-thumb.webp', cap: 'Furnizim me karburant', tags: ['video','service'], type: 'video' },
     { src: 'images/Tirane.jpg', cap: 'Tiranë — Stacion', tags: ['station'] },
     { src: 'images/furnizim varkash.png', cap: 'Furnizim mjetesh lundruese', tags: ['service'] },
     { src: 'images/MEMALIAJ N.jpg', cap: 'Memaliaj — Natë', tags: ['night','station'] },
@@ -1809,14 +1944,14 @@ document.addEventListener("click", () => {
     { src: 'images/kavaje.jpg', cap: 'Kavajë — Stacion', tags: ['station'] },
     { src: 'images/helikopter.png', cap: 'Furnizim aviacioni', tags: ['service'] },
     { src: 'images/patos me kart.jpg', cap: 'Patos — Kartë', tags: ['station','loyalty'] },
-    { src: 'images/karta-vip.mp4', cap: 'Karta VIP', tags: ['video','loyalty'], type: 'video', thumbTime: 1.2 },
+    { src: 'images/karta-vip.mp4', poster: 'images/gallery-vip-thumb.webp', cap: 'Karta VIP', tags: ['video','loyalty'], type: 'video' },
     { src: 'images/memaliaj.jpg', cap: 'Memaliaj — Stacion', tags: ['station'] },
     { src: 'images/kavje me bot.jpg', cap: 'Kavajë — Bot nate', tags: ['night','station'] },
     { src: 'images/micka_card_1.png', cap: 'Kartë Standart', tags: ['loyalty'] },
     { src: 'images/varka.jpg', cap: 'Furnizim në porte', tags: ['service'] },
     { src: 'images/tirane (2).jpg', cap: 'Tiranë — Fasada', tags: ['station'] },
     { src: 'images/Memaliaj (2).jpg', cap: 'Memaliaj — Detaj nate', tags: ['night','station'] },
-    { src: 'images/karta e besnikerise.mp4', cap: 'Karta e besnikërisë', tags: ['video','loyalty'], type: 'video', thumbTime: 1.4 },
+    { src: 'images/karta e besnikerise.mp4', poster: 'images/gallery-loyalty-thumb.webp', cap: 'Karta e besnikërisë', tags: ['video','loyalty'], type: 'video' },
     { src: 'images/pika kavaje.jpg', cap: 'Pika Kavajë', tags: ['station'] },
     { src: 'images/memaliaj ai.png', cap: 'Memaliaj — Përpunim vizual', tags: ['station'] },
     { src: 'images/micka_card_3.png', cap: 'Kartë Business', tags: ['loyalty'] },
@@ -1826,7 +1961,7 @@ document.addEventListener("click", () => {
     { src: 'images/karta e besnikerise foto.jpeg', cap: 'Karta e besnikërisë', tags: ['loyalty'] },
     { src: 'images/patos (2).jpg', cap: 'Patos — Pamje', tags: ['station'] },
     { src: 'images/MEMALIAJ NATEN SIDE.jpg', cap: 'Memaliaj — Pamje anësore nate', tags: ['night','station'] },
-    { src: 'images/tollon.mp4', cap: 'Tollon elektronik', tags: ['video','loyalty'], type: 'video', thumbTime: 1.2 },
+    { src: 'images/tollon.mp4', poster: 'images/gallery-tollon-thumb.webp', cap: 'Tollon elektronik', tags: ['video','loyalty'], type: 'video' },
     { src: 'images/pika kavaje2.jpg', cap: 'Kavajë — Hyrje', tags: ['station'] },
     { src: 'images/punonjes me logo.jpg', cap: 'Ekipi Micka Oil', tags: ['team'] },
     { src: 'images/memaluaj.jpg', cap: 'Memaliaj — Pamje', tags: ['station'] },
@@ -1863,20 +1998,62 @@ document.addEventListener("click", () => {
     return item.type === 'video';
   }
 
+  function galleryLanguage() {
+    return getCurrentLanguage() === 'en' ? 'en' : 'sq';
+  }
+
+  function captionFor(item) {
+    if (galleryLanguage() !== 'en') return item.cap;
+    const replacements = [
+      ['Karta e besnikërisë', 'Loyalty Card'],
+      ['Furnizim mjetesh lundruese', 'Marine vessel fueling'],
+      ['Transport hidrokarburesh', 'Hydrocarbon transport'],
+      ['Furnizim me karburant', 'Fuel supply'],
+      ['Furnizim aviacioni', 'Aviation fueling'],
+      ['Furnizim në porte', 'Port fueling'],
+      ['Pamje anësore nate', 'Night side view'],
+      ['Përpunim vizual', 'Visual rendering'],
+      ['Ndriçim nate', 'Night lighting'],
+      ['Transport nate', 'Night transport'],
+      ['Detaj nate', 'Night detail'],
+      ['Bot nate', 'Night tanker'],
+      ['Tollon elektronik', 'Electronic voucher'],
+      ['Prezantim', 'Presentation'],
+      ['Kartë Standart', 'Standard Card'],
+      ['Kartë Business', 'Business Card'],
+      ['Kartë VIP', 'VIP Card'],
+      ['Karta VIP', 'VIP Card'],
+      ['Kartë', 'Card'],
+      ['Stacion', 'Station'],
+      ['Pika ', 'Station '],
+      ['Natë', 'Night'],
+      ['Pamje', 'View'],
+      ['Detaj', 'Detail'],
+      ['Ndriçim', 'Lighting'],
+      ['Hyrje', 'Entrance'],
+      ['Ekipi', 'Team']
+    ];
+    return replacements.reduce((caption, [source, target]) => caption.replace(source, target), item.cap);
+  }
+
   function mediaMarkup(item, eager = false) {
+    const caption = captionFor(item);
     if (isVideo(item)) {
-      return `<video src="${item.src}" muted playsinline preload="metadata" data-thumb-time="${item.thumbTime || 1}"></video><span class="g-video-caption">${item.cap}</span><span class="g-media-play"><i class="fa-solid fa-play"></i></span>`;
+      return `<img src="${item.poster}" alt="${caption}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"><span class="g-video-caption">${caption}</span><span class="g-media-play"><i class="fa-solid fa-play"></i></span>`;
     }
-    return `<img src="${item.src}" alt="${item.cap}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
+    return `<img src="${item.src}" alt="${caption}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
   }
 
   function tagLabel(item) {
-    if (item.tags.includes('video')) return 'Video';
-    if (item.tags.includes('night')) return 'Natë';
-    if (item.tags.includes('team')) return 'Ekipi';
-    if (item.tags.includes('service')) return 'Shërbim';
-    if (item.tags.includes('loyalty')) return 'Kartë';
-    return 'Stacion';
+    const labels = galleryLanguage() === 'en'
+      ? { video: 'Video', night: 'Night', team: 'Team', service: 'Service', loyalty: 'Card', station: 'Station' }
+      : { video: 'Video', night: 'Natë', team: 'Ekipi', service: 'Shërbim', loyalty: 'Kartë', station: 'Stacion' };
+    if (item.tags.includes('video')) return labels.video;
+    if (item.tags.includes('night')) return labels.night;
+    if (item.tags.includes('team')) return labels.team;
+    if (item.tags.includes('service')) return labels.service;
+    if (item.tags.includes('loyalty')) return labels.loyalty;
+    return labels.station;
   }
 
   function updateCounts() {
@@ -1885,14 +2062,13 @@ document.addEventListener("click", () => {
 
   function renderGrid() {
     grid.innerHTML = IMGS.map((item, idx) => `
-      <div class="g-card g-card--loading ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}">
+      <div class="g-card g-card--loading ${isVideo(item) ? 'g-card--video' : ''}" data-idx="${idx}" data-tag="${item.tags.join(' ')}" role="button" tabindex="0" aria-label="${captionFor(item)}">
         ${mediaMarkup(item, idx < 4)}
-        <span class="g-card__loader" role="status"><i aria-hidden="true"></i><span>Duke ngarkuar</span></span>
+        <span class="g-card__loader" role="status"><i aria-hidden="true"></i><span>${galleryLanguage() === 'en' ? 'Loading' : 'Duke ngarkuar'}</span></span>
         <div class="g-card__overlay"><div class="g-card__icon"><i class="fa-solid fa-expand"></i></div></div>
         <span class="g-card__tag">${tagLabel(item)}</span>
       </div>`).join('');
     prepareMediaLoadingStates();
-    prepareVideoThumbnails();
   }
 
   function prepareMediaLoadingStates() {
@@ -1909,29 +2085,6 @@ document.addEventListener("click", () => {
       if (img.complete) settleCard(img, img.naturalWidth === 0);
     });
 
-    grid.querySelectorAll('.g-card video').forEach(video => {
-      video.addEventListener('seeked', () => settleCard(video), { once: true });
-      video.addEventListener('canplay', () => settleCard(video), { once: true });
-      video.addEventListener('error', () => settleCard(video, true), { once: true });
-    });
-  }
-
-  function prepareVideoThumbnails() {
-    grid.querySelectorAll('.g-card--video video').forEach(video => {
-      const targetTime = parseFloat(video.dataset.thumbTime || '1');
-      const seekToFrame = () => {
-        const safeTime = video.duration ? Math.min(targetTime, Math.max(video.duration - 0.2, 0)) : targetTime;
-        try {
-          video.currentTime = safeTime;
-        } catch (err) {
-          // Some browsers delay seeking until enough metadata is available.
-        }
-      };
-      video.addEventListener('loadedmetadata', seekToFrame, { once: true });
-      video.addEventListener('seeked', () => video.classList.add('is-thumb-ready'), { once: true });
-      video.addEventListener('canplay', () => video.classList.add('is-thumb-ready'), { once: true });
-      video.load();
-    });
   }
 
   /* ─────────────────────────────────────────
@@ -1941,15 +2094,11 @@ document.addEventListener("click", () => {
     lbFilm.innerHTML = '';
     pool.forEach((imgIdx, pi) => {
       const item = IMGS[imgIdx];
-      const t = document.createElement(isVideo(item) ? 'video' : 'img');
+      const t = document.createElement('img');
       t.className = 'g-lb__thumb';
-      t.src  = item.src;
+      t.src  = item.poster || item.src;
       t.alt  = '';
-      if (isVideo(item)) {
-        t.muted = true;
-        t.playsInline = true;
-        t.preload = 'metadata';
-      }
+      t.loading = 'lazy';
       t.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
@@ -1972,7 +2121,7 @@ document.addEventListener("click", () => {
 
   function syncUI() {
     lbCount.textContent = (lbIdx + 1) + ' / ' + pool.length;
-    lbCap.textContent   = IMGS[pool[lbIdx]].cap;
+    lbCap.textContent   = captionFor(IMGS[pool[lbIdx]]);
     syncFilm();
   }
 
@@ -2080,7 +2229,7 @@ document.addEventListener("click", () => {
       lbVideo.removeAttribute('src');
       lbImg.style.display = 'block';
       lbImg.src = item.src;
-      lbImg.alt = item.cap;
+      lbImg.alt = captionFor(item);
     }
   }
 
@@ -2131,6 +2280,15 @@ document.addEventListener("click", () => {
     if (pi >= 0) open(pi);
   });
 
+  document.addEventListener('keydown', e => {
+    if (lbOpen || (e.key !== 'Enter' && e.key !== ' ')) return;
+    const el = e.target.closest('.g-card[data-idx]');
+    if (!el) return;
+    e.preventDefault();
+    const pi = pool.indexOf(Number.parseInt(el.dataset.idx, 10));
+    if (pi >= 0) open(pi);
+  });
+
   /* ─────────────────────────────────────────
      06G. INITIAL RENDER
      Mobile menu behavior is handled once in app.js.
@@ -2139,6 +2297,11 @@ document.addEventListener("click", () => {
   updateCounts();
   pool = IMGS.map((_, i) => i);
   buildFilm();
+  document.getElementById('langToggle')?.addEventListener('change', () => {
+    renderGrid();
+    buildFilm();
+    if (lbOpen) syncUI();
+  });
   document.getElementById('year').textContent = new Date().getFullYear();
 
 })();
@@ -2153,4 +2316,53 @@ document.addEventListener("click", () => {
 
 
 
+
+// Full-screen cinematic video hero controls.
+document.addEventListener("DOMContentLoaded", () => {
+  const hero = document.getElementById("videoHero");
+  const video = document.getElementById("heroVideo");
+  const playButton = document.getElementById("heroPlayButton");
+  const muteButton = document.getElementById("heroMuteButton");
+  const fullscreenButton = document.getElementById("heroFullscreenButton");
+  const progress = document.getElementById("heroProgress");
+  if (!hero || !video) return;
+
+  const heroLabel = (sq, en) => getCurrentLanguage() === "en" ? en : sq;
+  const syncHeroControlLabels = () => {
+    if (playButton) playButton.innerHTML = `<i class="fa-solid fa-${video.paused ? "play" : "pause"}"></i>`;
+    playButton?.setAttribute("aria-label", video.paused
+      ? heroLabel("Luaj videon", "Play video")
+      : heroLabel("Ndalo videon", "Pause video"));
+    muteButton?.setAttribute("aria-label", video.muted
+      ? heroLabel("Aktivizo zërin", "Unmute video")
+      : heroLabel("Çaktivizo zërin", "Mute video"));
+  };
+
+  playButton?.addEventListener("click", async () => {
+    if (video.paused) await activateHeroVideo(true);
+    else video.pause();
+    const paused = video.paused;
+    playButton.innerHTML = `<i class="fa-solid fa-${paused ? "play" : "pause"}"></i>`;
+    syncHeroControlLabels();
+  });
+
+  muteButton?.addEventListener("click", () => {
+    video.muted = !video.muted;
+    muteButton.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? "xmark" : "high"}"></i>`;
+    syncHeroControlLabels();
+  });
+
+  fullscreenButton?.addEventListener("click", async () => {
+    if (!document.fullscreenElement) await hero.requestFullscreen?.();
+    else await document.exitFullscreen?.();
+  });
+
+  video.addEventListener("timeupdate", () => {
+    if (progress && video.duration) progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
+  });
+  video.addEventListener("play", syncHeroControlLabels);
+  video.addEventListener("pause", syncHeroControlLabels);
+  document.getElementById("langToggle")?.addEventListener("change", syncHeroControlLabels);
+  syncHeroControlLabels();
+});
 

@@ -1,4 +1,4 @@
-﻿// =========================================================
+// =========================================================
 // MICKA OIL FUEL PRICE DATA
 // ---------------------------------------------------------
 // Defines the live homepage fuel price board used by app.js.
@@ -12,7 +12,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     en: "Tirana"
   },
   exchangeRate: 91,
-  updatedAt: "2026-10-15T16:59:01+00:00",
+  updatedAt: "2026-11-12T00:57:31-05:00",
   history: [
     {
       date: "2026-06-01",
@@ -167,6 +167,17 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         lpg: 69,
         ev: 38
       }
+    },
+    {
+      date: "2026-11-12",
+      prices: {
+        "100": 231,
+        "95": 181,
+        diesel: 212,
+        "diesel-shell": 238,
+        lpg: 69,
+        ev: 38
+      }
     }
   ],
   products: [
@@ -202,7 +213,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Zgjedhja praktike për përdorim të përditshëm.",
         en: "Practical choice for everyday use."
       },
-      price: 190
+      price: 181
     },
     {
       id: "diesel",
@@ -219,7 +230,7 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
         sq: "Ideale për automjete, furgonë dhe flota.",
         en: "Ideal for vehicles, vans, and fleets."
       },
-      price: 213
+      price: 212
     },
     {
       id: "diesel-shell",
@@ -274,15 +285,3 @@ window.MICKA_HOME_FUEL_PRICE_BOARD = {
     }
   ]
 };
-
-
-
-
-
-
-
-
-
-
-
-

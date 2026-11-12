@@ -46,10 +46,8 @@
   />
   <link rel="icon" href="images/logo.png" />
   <link rel="preload" href="images/logo.png" as="image" fetchpriority="high" />
-  <link rel="preload" href="images/Tirane.jpg" as="image" fetchpriority="high" />
-  <link rel="preload" href="images/preload video.mp4" as="video" type="video/mp4" fetchpriority="high" />
-  <link rel="preload" href="images/video furnizim.mp4" as="video" type="video/mp4" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=20260819-navbar-unified" />
+  <link rel="preload" href="images/tirane-hero-poster.webp" as="image" fetchpriority="high" />
+  <link rel="stylesheet" href="style.css?v=20261111-social-position" />
   <link rel="stylesheet" href="video-hero.css?v=20260804-navbar-sticky" />
 
   <!-- Font Awesome for footer icons -->
@@ -68,20 +66,11 @@
   
   <div id="preloader" aria-hidden="true">
     <div class="loader-content">
-      <video id="preloadVideo" class="preload-video" autoplay muted playsinline preload="auto">
-        <source src="images/preload video.mp4" type="video/mp4" />
+      <video id="preloadVideo" class="preload-video" muted playsinline preload="none">
+        <source data-src="images/preload-logo-animation.mp4" type="video/mp4" />
       </video>
     </div>
   </div>
-  <script>
-    window.setTimeout(function () {
-      var loader = document.getElementById("preloader");
-      if (!loader) return;
-      loader.classList.add("hidden");
-      window.setTimeout(function () { loader.remove(); }, 500);
-    }, 1800);
-  </script>
-
   <!-- 02. FLOATING SOCIAL LINKS -->
   <div class="floating-social" id="floatingSocial">
     <!-- Facebook -->
@@ -179,140 +168,55 @@
 
   <!-- 04. HERO SECTION -->
   <section class="video-hero" id="videoHero">
-    <video class="video-hero__media" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="images/Tirane.jpg">
-      <source src="images/video furnizim.mp4" type="video/mp4" />
+    <video class="video-hero__media" id="heroVideo" muted loop playsinline preload="none" poster="images/tirane-hero-poster.webp">
+      <source data-src="images/video furnizim.mp4" type="video/mp4" />
     </video>
     <div class="video-hero__overlay" aria-hidden="true"></div>
 
     <div class="video-hero__inner">
-      <p class="video-hero__eyebrow">MICKA OIL <b>•</b> NË GJITHË SHQIPËRINË</p>
-      <h1>Karburant që<br><span>lëviz ritmin</span><br>e Shqipërisë.</h1>
+      <p class="video-hero__eyebrow" data-lang-html="video_hero_eyebrow">MICKA OIL <b>•</b> NË GJITHË SHQIPËRINË</p>
+      <h1 data-lang-html="home_title">Karburant që<br><span>lëviz ritmin</span><br>e Shqipërisë.</h1>
 
-      <nav class="video-hero__services" aria-label="Shërbimet kryesore">
+      <nav class="video-hero__services" aria-label="Shërbimet kryesore" data-lang-aria-label="video_services_aria">
         <a class="video-service" href="location.html">
           <span class="video-service__icon"><i class="fa-solid fa-location-dot"></i></span>
-          <span class="video-service__text"><strong>GJEJ STACIONIN</strong><small>Pika më e afërt për ty</small></span>
+          <span class="video-service__text"><strong data-lang="video_station_title">GJEJ STACIONIN</strong><small data-lang="video_station_text">Pika më e afërt për ty</small></span>
           <i class="fa-solid fa-arrow-right-long video-service__arrow"></i>
         </a>
         <a class="video-service video-service--active" href="contact.html">
           <span class="video-service__icon"><i class="fa-solid fa-truck-fast"></i></span>
-          <span class="video-service__text"><strong>MICKA BUSINESS</strong><small>Karburant. Kontroll. Efikasitet.</small></span>
+          <span class="video-service__text"><strong data-lang="video_business_title">MICKA BUSINESS</strong><small data-lang="video_business_text">Karburant. Kontroll. Efikasitet.</small></span>
           <i class="fa-solid fa-arrow-right-long video-service__arrow"></i>
         </a>
         <a class="video-service" href="karta-besnikerise.html">
           <span class="video-service__icon"><i class="fa-regular fa-credit-card"></i></span>
-          <span class="video-service__text"><strong>KARTA MICKA</strong><small>Përfitime në çdo ndalesë</small></span>
+          <span class="video-service__text"><strong data-lang="video_card_title">KARTA MICKA</strong><small data-lang="video_card_text">Përfitime në çdo ndalesë</small></span>
           <i class="fa-solid fa-arrow-right-long video-service__arrow"></i>
         </a>
       </nav>
 
       <div class="video-business">
         <i class="fa-solid fa-shield-halved video-business__icon"></i>
-        <span><small>ZGJIDHJE PËR BIZNESIN</small><strong>Furnizim i sigurt për kompaninë dhe flotën tuaj.</strong></span>
-        <a href="contact.html">FOL ME EKIPIN TONË <i class="fa-solid fa-arrow-right-long"></i></a>
+        <span><small data-lang="video_banner_kicker">ZGJIDHJE PËR BIZNESIN</small><strong data-lang="video_banner_text">Furnizim i sigurt për kompaninë dhe flotën tuaj.</strong></span>
+        <a href="contact.html"><span data-lang="video_banner_cta">FOL ME EKIPIN TONË</span> <i class="fa-solid fa-arrow-right-long"></i></a>
       </div>
 
-      <div class="video-stats" aria-label="Micka Oil në shifra">
-        <article><i class="fa-solid fa-location-dot"></i><strong>6+</strong><span>PIKA AKTIVE</span></article>
-        <article><i class="fa-solid fa-shield-halved"></i><strong>25+</strong><span>VITE EKSPERIENCË</span></article>
-        <article><i class="fa-regular fa-clock"></i><strong>24/7</strong><span>SHËRBIM NË PIKA KYÇE</span></article>
-        <article><i class="fa-solid fa-check"></i><strong>100%</strong><span>KARBURANT I KONTROLLUAR</span></article>
+      <div class="video-stats" aria-label="Micka Oil në shifra" data-lang-aria-label="video_stats_aria">
+        <article><i class="fa-solid fa-location-dot"></i><strong>6+</strong><span data-lang="video_stat_stations">PIKA AKTIVE</span></article>
+        <article><i class="fa-solid fa-shield-halved"></i><strong>25+</strong><span data-lang="video_stat_experience">VITE EKSPERIENCË</span></article>
+        <article><i class="fa-regular fa-clock"></i><strong>24/7</strong><span data-lang="video_stat_service">SHËRBIM NË PIKA KYÇE</span></article>
+        <article><i class="fa-solid fa-check"></i><strong>100%</strong><span data-lang="video_stat_quality">KARBURANT I KONTROLLUAR</span></article>
       </div>
     </div>
 
-    <div class="video-controls" aria-label="Kontrollet e videos">
-      <button type="button" id="heroPlayButton" aria-label="Ndalo videon"><i class="fa-solid fa-pause"></i></button>
-      <button type="button" id="heroMuteButton" aria-label="Aktivizo zërin"><i class="fa-solid fa-volume-xmark"></i></button>
+    <div class="video-controls" aria-label="Kontrollet e videos" data-lang-aria-label="video_controls_aria">
+      <button type="button" id="heroPlayButton" aria-label="Ndalo videon" data-lang-aria-label="video_pause_aria"><i class="fa-solid fa-pause"></i></button>
+      <button type="button" id="heroMuteButton" aria-label="Aktivizo zërin" data-lang-aria-label="video_unmute_aria"><i class="fa-solid fa-volume-xmark"></i></button>
       <span class="video-controls__progress" aria-hidden="true"><i id="heroProgress"></i></span>
-      <button type="button" id="heroFullscreenButton" aria-label="Shfaq në ekran të plotë"><i class="fa-solid fa-expand"></i></button>
+      <button type="button" id="heroFullscreenButton" aria-label="Shfaq në ekran të plotë" data-lang-aria-label="video_fullscreen_aria"><i class="fa-solid fa-expand"></i></button>
     </div>
-    <a class="video-scroll" href="#fuelPrices" aria-label="Shiko më shumë"><i class="fa-solid fa-chevron-down"></i></a>
+    <a class="video-scroll" href="#fuelPrices" aria-label="Shiko më shumë" data-lang-aria-label="video_scroll_aria"><i class="fa-solid fa-chevron-down"></i></a>
   </section>
-
-  <section class="hero-panel hero-panel--mock fade-in">
-    <video class="hero-background" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="images/video furnizim.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-wash" aria-hidden="true"></div>
-    <span class="hero-index" aria-hidden="true">01 / MICKA OIL</span>
-    <div class="hero-shell">
-      <div class="hero-copy">
-        <p class="hero-eyebrow" data-lang="home_eyebrow">Energjia që mban Shqipërinë në lëvizje</p>
-        <h1 data-lang-html="home_title">Karburant q&euml;<br><span>l&euml;viz ritmin</span><br>e Shqip&euml;ris&euml;.</h1>
-        <p class="hero-lead" data-lang="home_lead">
-          Nga drejtuesit individualë te bizneset, flotat dhe transporti profesional, Micka Oil ofron karburant të kontrolluar dhe shërbim të besueshëm në pikat kyçe të vendit.
-        </p>
-
-        <div class="hero-actions">
-          <a href="contact.html" class="hero-btn hero-btn--primary" data-lang="home_cta_contact">Kërko ofertë</a>
-          <a href="location.html" class="hero-btn hero-btn--secondary" data-lang="home_cta_locations">Gjej stacionin më të afërt</a>
-        </div>
-
-        <div class="hero-metrics hero-metrics--detached" aria-label="Key business metrics">
-          <article class="hero-metric">
-            <strong class="hero-metric-value" data-counter-type="plus" data-counter-target="6">6</strong>
-            <span data-lang="home_metric_stations">Pika aktive</span>
-          </article>
-          <article class="hero-metric">
-            <strong class="hero-metric-value" data-counter-type="plus" data-counter-target="25">25+</strong>
-            <span data-lang="home_metric_experience">Vite eksperiencë</span>
-          </article>
-          <article class="hero-metric">
-            <strong class="hero-metric-value" data-counter-type="split" data-counter-left-target="24" data-counter-right-text="/7">24/7</strong>
-            <span data-lang="home_metric_supply">Shërbim</span>
-          </article>
-          <article class="hero-metric">
-            <strong class="hero-metric-value" data-counter-type="percent" data-counter-target="100">100%</strong>
-            <span data-lang="home_metric_quality">Cilësi &amp; kontroll</span>
-          </article>
-        </div>
-      </div>
-
-      <aside class="hero-spotlight" aria-label="Business services spotlight">
-        <article class="spotlight-card">
-          <span class="spotlight-label" data-lang="home_card_label">Zgjidhje për biznesin</span>
-          <h2 data-lang="home_card_title">Partner energjie për kompani, flota dhe transport</h2>
-          <p data-lang="home_card_text">
-            Kontrata furnizimi, shpërndarje e planifikuar dhe mbështetje profesionale për operim të sigurt e pa ndërprerje.
-          </p>
-        </article>
-
-        <div class="spotlight-grid">
-          <article class="spotlight-mini">
-            <span class="spotlight-mini__icon" aria-hidden="true">
-              <i class="fa-solid fa-gas-pump"></i>
-            </span>
-            <h3 data-lang="home_mini1_title">Karburant i kontrolluar</h3>
-            <p data-lang="home_mini1_text">Cilësi e verifikuar për përdorim të përditshëm dhe profesional.</p>
-          </article>
-
-          <article class="spotlight-mini">
-            <span class="spotlight-mini__icon" aria-hidden="true">
-              <i class="fa-solid fa-truck-fast"></i>
-            </span>
-            <h3 data-lang="home_mini2_title">Shërbim i shpejtë</h3>
-            <p data-lang="home_mini2_text">Rrjet pikash që mbajnë ritmin e lëvizjes pa vonesa të panevojshme.</p>
-          </article>
-        </div>
-      </aside>
-    </div>
-
-    <div class="hero-availability" aria-label="Shërbim 24 orë, 7 ditë">
-      <strong>24/7</strong>
-      <span>NË LËVIZJE</span>
-    </div>
-    <span class="hero-side-label" aria-hidden="true">01 / LËVIZJE</span>
-  </section>
-
-  <div class="hero-ticker" aria-label="Avantazhet e Micka Oil">
-    <div class="hero-ticker__track">
-      <span>Karburant i kontrolluar</span><b>✦</b>
-      <span>Furnizim 24/7</span><b>✦</b>
-      <span>Flota &amp; biznese</span><b>✦</b>
-      <span>Në gjithë Shqipërinë</span><b>✦</b>
-      <span>Karburant i kontrolluar</span><b>✦</b>
-    </div>
-  </div>
 
   <!-- 05. FUEL PRICE BOARD -->
   <section class="home-price-board fade-in" id="fuelPrices" aria-labelledby="priceBoardTitle">
@@ -449,7 +353,7 @@
     <div class="list" id="list">
 
       <div class="item active">
-        <img src="images/kavaje naten 2.jpg" alt="Stacioni Micka Oil ne mbremje" fetchpriority="high" decoding="async" />
+        <img src="images/kavaje naten 2.jpg" alt="Stacioni Micka Oil ne mbremje" loading="lazy" decoding="async" />
       </div>
 
       <div class="item">
@@ -685,18 +589,22 @@
 
             <article class="product-card product-card--ev-source">
               <div class="product-card--ev-source__copy">
-                <span class="product-card--ev-source__eyebrow"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span data-lang="product_ev_kicker">Burim i ri për automjetet</span></span>
+                <div class="product-card--ev-source__topline">
+                  <span class="product-card--ev-source__eyebrow"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span data-lang="product_ev_kicker">Burim i ri për automjetet</span></span>
+                  <span class="product-card--ev-source__badge">EV</span>
+                </div>
                 <div class="product-title">
                   <h3 data-lang="product_ev_name">Karikim Elektrik</h3>
-                  <span class="badge">EV</span>
                 </div>
                 <p class="product-desc" data-lang="product_ev_desc">Karikim praktik për automjete elektrike, aktualisht i disponueshëm në pikën Micka Oil Kavajë.</p>
-                <div class="product-tags">
-                  <span data-lang="product_ev_tag1">Kavajë</span>
-                  <span data-lang="product_ev_tag2">Elektrik</span>
-                  <span data-lang="product_ev_tag3">Energji diellore</span>
+                <div class="product-card--ev-source__footer">
+                  <div class="product-tags">
+                    <span data-lang="product_ev_tag1">Kavajë</span>
+                    <span data-lang="product_ev_tag2">Elektrik</span>
+                    <span data-lang="product_ev_tag3">Energji diellore</span>
+                  </div>
+                  <a href="location.html#station-2"><span data-lang="product_ev_cta">Shiko pikën Kavajë</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
                 </div>
-                <a href="location.html#locationsCards" data-lang="product_ev_cta">Shiko pikën Kavajë</a>
               </div>
               <figure class="product-card--ev-source__media">
                 <img src="images/ev-charging-active.jpg" alt="Automjet elektrik duke u karikuar në Micka Oil Kavajë" loading="lazy" decoding="async">
@@ -705,11 +613,11 @@
             </article>
           </div>
 
-          <div class="products-trust-strip" aria-label="Standardet e furnizimit">
-            <span><i class="fa-regular fa-circle-check" aria-hidden="true"></i><strong>Karburante cilësore</strong><small>Standarde të larta</small></span>
-            <span><i class="fa-solid fa-gauge-high" aria-hidden="true"></i><strong>Performancë maksimale</strong><small>Mbrojtje e motorit</small></span>
-            <span><i class="fa-solid fa-suitcase" aria-hidden="true"></i><strong>Për çdo udhëtim</strong><small>Besueshmëri totale</small></span>
-            <span class="products-trust-strip__highlight"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><strong>Energjia lokale</strong><small>që mban Shqipërinë në lëvizje.</small></span>
+          <div class="products-trust-strip" aria-label="Standardet e furnizimit" data-lang-aria-label="products_trust_aria">
+            <span><i class="fa-regular fa-circle-check" aria-hidden="true"></i><strong data-lang="products_trust_quality_title">Karburante cilësore</strong><small data-lang="products_trust_quality_text">Standarde të larta</small></span>
+            <span><i class="fa-solid fa-gauge-high" aria-hidden="true"></i><strong data-lang="products_trust_performance_title">Performancë maksimale</strong><small data-lang="products_trust_performance_text">Mbrojtje e motorit</small></span>
+            <span><i class="fa-solid fa-suitcase" aria-hidden="true"></i><strong data-lang="products_trust_journey_title">Për çdo udhëtim</strong><small data-lang="products_trust_journey_text">Besueshmëri totale</small></span>
+            <span class="products-trust-strip__highlight"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><strong data-lang="products_trust_local_title">Energjia lokale</strong><small data-lang="products_trust_local_text">që mban Shqipërinë në lëvizje.</small></span>
           </div>
         </section>
 
@@ -726,14 +634,14 @@
               <div class="product-title"><h3 data-lang-html="product6_name">Furnizim<br />me Bitum</h3><span class="badge">BITUM</span></div>
               <p class="product-desc" data-lang="product6_desc">Zgjidhje profesionale për projekte infrastrukturore, ndërtim rrugësh dhe zbatim industrial.</p>
               <img class="product-card__vehicle" src="assets/images/products/bitum roller.png" alt="Rul asfalti për bitum" loading="lazy" decoding="async" />
-              <div class="product-tags"><span>Infrastrukturë</span><span>Industrial</span><span>Furnizim</span></div>
+              <div class="product-tags"><span data-lang="product6_tag1">Infrastrukturë</span><span data-lang="product6_tag2">Industrial</span><span data-lang="product6_tag3">Furnizim</span></div>
             </article>
             <article class="product-card product-card--media product-card--mazut">
               <img class="product-card__symbol product-card__symbol--dark" src="assets/images/products/icon-mazut.png" alt="" aria-hidden="true" />
               <div class="product-title"><h3 data-lang="product8_name">Mazut</h3><span class="badge">FUEL OIL</span></div>
               <p class="product-desc" data-lang="product8_desc">Zgjidhje energjie për procese industriale dhe nevoja me konsum të lartë e të qëndrueshëm.</p>
               <img class="product-card__drop" src="assets/images/products/oil-drop.png" alt="Pikë vaji e zezë" loading="lazy" decoding="async" />
-              <div class="product-tags"><span>Industri</span><span>Energji</span><span>Kapacitetë</span></div>
+              <div class="product-tags"><span data-lang="product8_tag1">Industri</span><span data-lang="product8_tag2">Energji</span><span data-lang="product8_tag3">Kapacitet</span></div>
             </article>
           </div>
         </section>
@@ -750,7 +658,7 @@
             <div class="product-card__aviation-copy">
               <div class="product-title"><h3 data-lang="product7_name">Jet A1</h3><span class="badge badge--blue">AVIATION</span></div>
               <p class="product-desc" data-lang="product7_desc">Karburant aviacioni me standard të lartë për operim të sigurt dhe performancë të qëndrueshme.</p>
-              <div class="product-tags"><span>Aviacion</span><span>Standard</span><span>Siguri</span></div>
+              <div class="product-tags"><span data-lang="product7_tag1">Aviacion</span><span data-lang="product7_tag2">Standard</span><span data-lang="product7_tag3">Siguri</span></div>
             </div>
             <img class="product-card__aviation-truck" src="assets/images/products/Jet A1 aviation fuel..png" alt="Kamion furnizimi Jet A1" loading="lazy" decoding="async" />
           </article>
@@ -758,7 +666,7 @@
 
         <div class="products-cta">
           <div class="products-cta__lead"><img src="assets/images/products/icon-transport.png" alt="" aria-hidden="true" /><p data-lang="products_cta_text">Keni nevojë për furnizim të personalizuar apo ofertë sipas volumit?</p></div>
-          <div class="products-cta__features" aria-label="Avantazhet e furnizimit"><span><i class="fa-regular fa-clock" aria-hidden="true"></i>Furnizim 24/7</span><span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>Standarde të larta</span><span><i class="fa-solid fa-handshake" aria-hidden="true"></i>Siguri dhe besueshmëri</span></div>
+          <div class="products-cta__features" aria-label="Avantazhet e furnizimit" data-lang-aria-label="products_cta_features_aria"><span><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-lang="products_cta_feature_1">Furnizim 24/7</span></span><span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span data-lang="products_cta_feature_2">Standarde të larta</span></span><span><i class="fa-solid fa-handshake" aria-hidden="true"></i><span data-lang="products_cta_feature_3">Siguri dhe besueshmëri</span></span></div>
           <a href="contact.html" class="products-cta__button" data-lang="products_cta_button">KËRKO OFERTË <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
       </div>
@@ -870,8 +778,8 @@
   </footer>
 
   <!-- 13. SCRIPTS -->
-  <script src="language.js?v=20260718-14"></script>
-  <script src="fuel-prices.js?v=20260717-12"></script>
-  <script src="app.js?v=20260720-21"></script>
+<script src="language.js?v=20260826-16"></script>
+  <script src="fuel-prices.js?v=20261112-prices"></script>
+<script src="app.js?v=20261112-prices"></script>
 </body>
 </html>
