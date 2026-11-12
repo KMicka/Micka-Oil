@@ -20296,19 +20296,19 @@ body.home-page .floating-social { right: 14px; }
 
 @media (max-width: 560px) {
   body.home-page .floating-social {
-    top: auto;
-    right: 10px;
-    bottom: 76px;
-    flex-direction: column;
-    gap: 8px;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
+    top: 68px;
+    right: 8px;
+    bottom: auto;
+    flex-direction: row;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 14px;
+    background: rgba(20,23,28,.72);
+    box-shadow: 0 10px 24px rgba(9,12,15,.2);
+    backdrop-filter: blur(8px);
   }
-  body.home-page .floating-social .social-btn { width: 42px; height: 42px; border-radius: 11px; }
-  body.home-page .floating-social .social-btn svg { width: 22px; height: 22px; }
+  body.home-page .floating-social .social-btn { width: 32px; height: 32px; border-radius: 9px; box-shadow: none; }
+  body.home-page .floating-social .social-btn svg { width: 18px; height: 18px; }
   body.home-page .hero-panel--mock .hero-metrics { right: auto; left: 0; width: 100%; bottom: -157px; }
   body.home-page .hero-panel--mock .hero-actions { flex-wrap: wrap; }
   body.home-page .hero-panel--mock .hero-btn { padding-right: 54px; text-align: left; }
